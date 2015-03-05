@@ -12,7 +12,6 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 
 import org.rexcrawler.Crawler;
-import org.rexcrawler.CrawlerHandler;
 import org.rexcrawler.Page;
 
 import soen487.wscat.marfcat.MarfcatIn;
@@ -24,19 +23,21 @@ import soen487.wscat.parser.WSDLParser;
 
 @WebService
 public class WSDLRetriever {
-
-	/*
-	 * TODO:
-	 * What this method is suppose to return??
-	 */	
-	private static List<String> retrieve(String rootSearch, int seachLimit, WSDLParser parser)
+	
+	@WebMethod
+	public List<String> retrieveWSDLs(String pstrSeedURI, 
+			Integer piLimit) throws IOException, InterruptedException {
+		return retrieve(pstrSeedURI, piLimit, new WSCatParser());
+	}
+	
+	private static List<String> retrieve(String rootSearch, int searchLimit, WSDLParser parser) 
 			throws IOException, InterruptedException {
 		
 		// Crawl
 		Crawler crawler = new Crawler();
 		crawler.setHandler(parser);
 		crawler.setChunkSize(8);
-		crawler.setSearchLength(seachLimit);
+		crawler.setSearchLength(searchLimit);
 		crawler.run(new URL(ProgrammableWebParser.ROOT));
 		
 		// Marfcat
@@ -64,12 +65,6 @@ public class WSDLRetriever {
 		marfcatIn.add(marf.write());
 		
 		return marfcatIn;
-	}
-	
-	@WebMethod(operationName = "retrieveWSDLs")
-	public List<String> retrieve(@WebParam(name = "wsdlURI") String pstrSeedURI, 
-			@WebParam(name = "limit") Integer piLimit) throws IOException, InterruptedException {
-		return retrieve(pstrSeedURI, piLimit, new WSCatParser());
 	}
 	
 	@WebMethod(exclude=true)
