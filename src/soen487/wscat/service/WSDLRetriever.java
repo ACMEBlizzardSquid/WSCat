@@ -1,6 +1,7 @@
 package soen487.wscat.service;
 
 import java.io.IOException;
+import java.lang.InterruptedException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.AbstractMap.SimpleEntry;
@@ -27,7 +28,7 @@ public class WSDLRetriever {
 	@WebMethod
 	public List<String> retrieveWSDLs(String pstrSeedURI, 
 			Integer piLimit) throws IOException, InterruptedException {
-		return retrieve(pstrSeedURI, piLimit, new WSCatParser());
+		return retrieve(pstrSeedURI, piLimit +1, new WSCatParser());
 	}
 	
 	private static List<String> retrieve(String rootSearch, int searchLimit, WSDLParser parser) 
@@ -36,9 +37,9 @@ public class WSDLRetriever {
 		// Crawl
 		Crawler crawler = new Crawler();
 		crawler.setHandler(parser);
-		crawler.setChunkSize(8);
+		//crawler.setChunkSize(8);
 		crawler.setSearchLength(searchLimit);
-		crawler.run(new URL(ProgrammableWebParser.ROOT));
+		crawler.run(new URL(rootSearch));
 		
 		// Marfcat
 		MarfcatIn marf = new MarfcatIn();
@@ -69,6 +70,10 @@ public class WSDLRetriever {
 	
 	@WebMethod(exclude=true)
 	public static void main(String[] args) throws IOException, InterruptedException {
+		// Grab ProgrammableWeb
 		retrieve(ProgrammableWebParser.ROOT, 100 , new ProgrammableWebParser());
+		// Example
+//		retrieve("http://data.serviceplatform.org/wsdl_grabbing/service_repository-wsdls/valid_WSDLs/", 
+//				10, new WSCatParser());
 	}
 }

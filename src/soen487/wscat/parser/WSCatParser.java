@@ -38,7 +38,7 @@ public class WSCatParser extends WSDLParser {
 				this.wsdls.add(new SimpleEntry<String, String>(page.getConnection().getURL().toString(), description));
 			}
 			else
-				System.err.println("No WSDL description found");
+				System.err.println("No WSDL documentation for "+page);
 		}
 		return true;
 	}
