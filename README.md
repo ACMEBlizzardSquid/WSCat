@@ -15,7 +15,7 @@ This service aims to use the MARF semantic capabilities to offer WSDL classifica
 ![System Diagram](doc/system_diagram.png)
 
 ### Documentation
-This project provides a brief [description](doc/overview.pdf) of this system and its functionalities. Additionally, the appropriate Javadoc documentation can be generate with `make doc`.
+This project provides a brief [description](README.md) of this system and its functionalities. Additionally, the appropriate Javadoc documentation can be generate with `make doc`.
 
 ### User cases
  1. Submit an URL locating a WSDL for classification.
@@ -25,5 +25,5 @@ This project provides a brief [description](doc/overview.pdf) of this system and
 During the implementation of this project, we opted to integrate or skip some of the specifications in the assignments. This section explains our motivations for changing or diverging from the original requirements.
 
  * According to PM1, the crawler should be able to parse the WSDL in order to grab its description. We adopted this solution since it is independent from the web site submited.
- * Alternatively to the general solution, `WSDLRetriever` has a custom parser which target 'programmableweb'. Having an ad-hoc parse allows us to retrieve WSDLs that match a **sigle word** category.
+ * Alternatively to the general solution, `WSDLRetriever` has a custom parser which target 'programmableweb'. Having an ad-hoc parse allows us to retrieve WSDLs that match a **single word** category.
  * The crawler meets the basic requirements, but we detach it as a sub-module documented [here](https://github.com/shake0/RexCrawler). This framework allows to deploy custom parsers on multithreaded crawling system.
