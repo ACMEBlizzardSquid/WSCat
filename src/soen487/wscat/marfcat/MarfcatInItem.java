@@ -16,6 +16,7 @@ public class MarfcatInItem {
     private int bytes;
     private int words;
     private int lines;
+    private int id;
     
     /**
      * Generates a MarfcatInItem
@@ -64,6 +65,22 @@ public class MarfcatInItem {
     }
     
     /**
+     * Gets the id attribute
+     * @return the id attribute of the file
+     */
+    public int getId() {
+        return id;
+    }
+    
+    /**
+     * Sets the id attribute of the file
+     * @param id the id attribute of the file
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    /**
      * Gets the path to the file for the MarfcatInItem
      * @return The path to the file
      */
@@ -109,5 +126,29 @@ public class MarfcatInItem {
      */
     public int getBytes () {
         return bytes;
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("  <file id=\"").append(this.getId()).append("\" path=\"").append(this.getPath()).append("\">");
+        sb.append("    <meta>");
+        sb.append("      <type>").append(this.getType()).append("</type>");
+        sb.append("      <length lines=\"").append(this.getLines())
+                .append("\" words=\"").append(this.getWords())
+                .append("\" bytes=\"").append(this.getBytes()).append("\" />");
+        sb.append("    </meta>");
+        sb.append("    <location line=\"\" fraglines=\"\">");
+        sb.append("      <meta>");
+        sb.append("        <cve>").append(this.getCVE()).append("</cve>");
+        sb.append("        <name cweid=\"\"></name>");
+        sb.append("      </meta>");
+        sb.append("      <fragment>");
+        sb.append("      </fragment>");
+        sb.append("      <explanation>");
+        sb.append("      </explanation>");
+        sb.append("    </location>");
+        sb.append("  </file>");
+        return sb.toString();
     }
 }
