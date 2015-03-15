@@ -2,6 +2,7 @@ package soen487.wscat.marfcat;
 
 import java.io.IOException;
 import java.util.UUID;
+import java.util.HashMap;
 
 /**
  * MARFCAT
@@ -11,8 +12,7 @@ import java.util.UUID;
  */
 public class Marfcat {
     
-    public static final String MARFCAT_LIB = "/WEB-INF/lib";
-    
+    public static final String MARFCAT_LIB = "/WEB-INF/lib";    
     private static String rootPath = System.getProperty("user.dir");        // the root application path
     
     /**
@@ -91,5 +91,15 @@ public class Marfcat {
         String inputBlah = inputFilePath.replace("/", "");
         String filePath = rootPath + "/report-" + inputBlah + "noprepreprawfftcheb-" + uuid + ".xml";
         return filePath;
+    }
+    
+    /**
+     * Returns a list of available categories for MARFCAT.  
+     * @return The list of available categories for MARFCAT as a HASHMAP where
+     *          the key is a String (the category) and the value is the Integer
+     *          ID of the category.
+     */
+    public HashMap<String, Integer> getCategories () {
+       return marf.apps.MARFCAT.SATE.SATEDb.MAP_CVES_TO_IDS;
     }
 }
