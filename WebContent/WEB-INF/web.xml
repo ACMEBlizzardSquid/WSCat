@@ -15,14 +15,6 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>REST Service</servlet-name>
-    <url-pattern>/categories/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>REST Service</servlet-name>
-    <url-pattern>/files/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>REST Service</servlet-name>
-    <url-pattern>/logs/*</url-pattern>
+    <url-pattern>/api/*</url-pattern>
   </servlet-mapping>
 </web-app>
