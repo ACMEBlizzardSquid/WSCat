@@ -20,6 +20,12 @@ import soen487.wscat.marfcat.Marfcat;
 @Path("/categories")
 public class Category {
 
+    /**
+     * Retrieves a given category by ID 
+     * @param id The ID of the category to retrieve
+     * @return A JSON representation of the category
+     * @throws IOException If communication with the MARFCAT exe fails.
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
@@ -53,6 +59,11 @@ public class Category {
         return Response.ok(response).build();
     }
     
+    /**
+     * Retrieves all categories
+     * @return A JSON representation of all categories
+     * @throws IOException 
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getCategories() 
