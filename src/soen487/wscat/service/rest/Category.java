@@ -19,6 +19,38 @@ import soen487.wscat.marfcat.Marfcat;
 @Path("/categories")
 public class Category {
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{id}")
+    public String getCategory(@PathParam("id") int id) 
+            throws IOException {
+        
+        // get all marfcat categories
+        Marfcat marf = new Marfcat();
+        HashMap<String, Integer> categories = marf.getCategories();
+        
+        // build json response
+        Map.Entry<String, Integer> selection = null;
+        for (Map.Entry<String, Integer> entry : categories.entrySet()) {
+            if (entry.getValue() == id) {
+                selection = entry;
+            }
+        }
+        
+        String response;
+        if (selection == null) {
+            response = "not found";
+        } else {
+            JsonBuilderFactory builder = Json.createBuilderFactory(null);
+            response = builder.createObjectBuilder()
+                    .add("name", selection.getKey())
+                    .add("id", selection.getValue())
+                    .build()
+                    .toString();
+        }
+        
+        return response;
+    }
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
