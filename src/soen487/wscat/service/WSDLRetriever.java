@@ -62,10 +62,11 @@ public class WSDLRetriever {
 		}
 		
 		// Write MARFCAT-IN
-		List<String> marfcatIn = new LinkedList<>();
-		marfcatIn.add(marf.write());
+		List<String> marfcatInPaths = new LinkedList<>();
+                marf.write();
+		marfcatInPaths.add(marf.getPath());
 		
-		return marfcatIn;
+		return marfcatInPaths;
 	}
 	
 	@WebMethod(exclude=true)

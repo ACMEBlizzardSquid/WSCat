@@ -1,36 +1,29 @@
 WSCat
 ========
 
-# Structure
+Web Service Categorization Service
+--------
 
-_/soen487/wscat/marfcat_
+### Description
+This is a research project that has to do writing a client and service to gauge other services from a repository or set of repositories (e.g., by crawling for WSDLs, WADLs, UDDIs, RDFs) and then using a classier, such as MARF, to categorize the services (e.g., by the service type, or industry)
 
-Connor's marfcat API
+### Design
+WSCat is a composition of two services:
+ * **WSCat** is the main service that expose the method requested in the project's outline.
+ * **WSDLRetirever** is the backbone service used to crawl and parse WSDLs used in the MARFCAT-IN.xml file.
+This service aims to use the MARF semantic capabilities to offer WSDL classification. The following diagram illustrates a generic overview of the system, representing the main WSCat's components:
+![System Diagram](doc/system_diagram.png)
 
-Dependencies:
- * /WebContent/WEB-INF/lib/marfcat.jar
- * /WebContent/WEB-INF/lib/marf.jar
+### Documentation
+This project provides a brief [description](README.md) of this system and its functionalities. Additionally, the appropriate Javadoc documentation can be generate with `make doc`.
 
-_/soen487/wscat/parser_
+### User cases
+ 1. Submit an URL locating a WSDL for classification.
+ 2. Submit an URL locating a list of WSDLs to include in the dataset.
 
-Web crawler's parsers used to gather WSDL and generate the 
-MARFCAT-IN
+### Variations
+During the implementation of this project, we opted to integrate or skip some of the specifications in the assignments. This section explains our motivations for changing or diverging from the original requirements.
 
-Dependencies:
- * /WebContent/WEB-INF/lib/rexcrawler.jar
-
-_/soen487/wscat/service_
-
-SOAP services. They may contain main entry point for testing or local execution
-
-Dependecies:
- * /lib/wsdlretriever-service.jar (Classes generated from WSDLRetriever service)
-
-# Notes
-
-WSCat uses an internal service (WSDLRetriever), this confuses Glassfish if we include
-the interface for WSDLRetrieve as a library. Therefore those are placed in /lib which
-is not imported in the WAR file.
-
-We may need to consider to split the project, having one WAR file per service but it
-depends on the requiremnts for BPEL.
+ * According to PM1, the crawler should be able to parse the WSDL in order to grab its description. We adopted this solution since it is independent from the web site submited.
+ * Alternatively to the general solution, `WSDLRetriever` has a custom parser which target 'programmableweb'. Having an ad-hoc parse allows us to retrieve WSDLs that match a **single word** category.
+ * The crawler meets the basic requirements, but we detach it as a sub-module documented [here](https://github.com/shake0/RexCrawler). This framework allows to deploy custom parsers on multithreaded crawling system.

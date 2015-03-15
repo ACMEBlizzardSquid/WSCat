@@ -22,6 +22,8 @@ public class MarfcatIn {
     
     private String rootPath;                // root application path
     private ArrayList<MarfcatInItem> items = new ArrayList<MarfcatInItem>();
+    private int highestId;
+    private String path;
     
     /**
      * Initializes the MarfcatIn object
@@ -29,8 +31,19 @@ public class MarfcatIn {
     public MarfcatIn () 
             throws IOException {
         
-        // set root path
+        this(Marfcat.generatePath());
+    }
+    
+    
+    public MarfcatIn (String path)
+            throws IOException {
+        
+        // set paths
         rootPath = new File(".").getCanonicalPath();
+        this.path = path;
+        
+        // get highest Id
+        highestId = getHighestId();
     }
     
     /**
@@ -38,6 +51,7 @@ public class MarfcatIn {
      * @param item The item to add
      */
     public void addItem (MarfcatInItem item) {
+        item.setId(highestId++);
         items.add(item);
     }
     
@@ -89,129 +103,19 @@ public class MarfcatIn {
         process.waitFor();
         return in.getOutput();
     }
+
     
     
     /**
-     * Writes the MARFCAT_IN file to a randomly generated path
-     * @return The path to the new MARFCAT_IN file
+     * Writes the MARFCAT_IN file
      * @throws FileNotFoundException
      * @throws IOException
      * @throws InterruptedException 
      */
-    public String write () 
-        throws FileNotFoundException, IOException, InterruptedException {
-        String location = Marfcat.generatePath();
-        write(location);
-        return location;
-    }
-    
-    
-    /**
-     * Writes the MARFCAT_IN file to the path provided
-     * @param path The path to write the MARFCAT_IN file to
-     * @throws FileNotFoundException
-     * @throws IOException
-     * @throws InterruptedException 
-     */
-    public void write(String path) 
+    public void write() 
             throws FileNotFoundException, IOException, InterruptedException {
-        writeWithPrinttWriter(path);
         
-    }
-    
-    /**
-     * Writes to the MARFCAT_IN file at the provided path.  If the file exists,
-     * it is appended to.  Otherwise, it is created.
-     * @param path The path to write to
-     * @throws FileNotFoundException
-     * @throws IOException
-     * @throws InterruptedException 
-     */
-    public void append(String path) 
-            throws FileNotFoundException, IOException, InterruptedException {
-        File file = new File(path);
-        if (!file.exists()) {
-            writeWithPrinttWriter(path);
-            return;
-        }
-        FileInputStream stream = new FileInputStream(file);
-        char c;
-        int i;
-        String idMatch = "<file id=\"";
-        int idMatchInt = 0;
-        String buffer = "";
-        int highestId = -1;
-        boolean readId = false;
-        while ((i = stream.read()) != -1) {
-          c = (char) i;
-          if (readId) {
-              if (c != '"') {
-                  buffer += c;
-              } else {
-                  int id = Integer.parseInt(buffer); // TODO: I get an error when appending an existing file
-                  if (id > highestId) {
-                      highestId = id;
-                  }
-                  buffer = "";
-                  readId = false;
-                  idMatchInt = 0;
-              }
-          } else if (c == idMatch.charAt(idMatchInt)) {
-              idMatchInt += 1;
-              if (idMatchInt == idMatch.length()) {
-                  readId = true;
-              }
-          } else {
-              idMatchInt = 0;
-          }
-        }
-        stream.close();
-        
-        RandomAccessFile f = new RandomAccessFile(file, "rw");
-        long length = f.length() - 1;
-        byte b;
-        do {                     
-          length -= 1;
-          f.seek(length);
-          b = f.readByte();
-        } while(b != 10);
-        f.setLength(length+1);
-        
-        FileWriter fw = new FileWriter(path, true);
-        BufferedWriter bw = new BufferedWriter(fw);
-        PrintWriter out = new PrintWriter(bw);
-        int id;
-        
-        for(i = 0; i < items.size(); i++) {
-            id = i + highestId + 1;
-            MarfcatInItem item = items.get(i);
-            out.println("  <file id=\"" + id + "\" path=\"" + item.getPath() + "\">");
-            out.println("    <meta>");
-            out.println("      <type>" + item.getType() + "</type>");
-            out.println("      <length lines=\"" + item.getLines() + "\" words=\"" 
-                    + item.getWords() + "\" bytes=\"" 
-                    + item.getBytes() + "\" />");
-            out.println("    </meta>");
-            out.println("    <location line=\"\" fraglines=\"\">");
-            out.println("      <meta>");
-            out.println("        <cve>\"" + item.getCVE() + "\"</cve>");
-            out.println("        <name cweid=\"\"></name>");
-            out.println("      </meta>");
-            out.println("      <fragment>");
-            out.println("      </fragment>");
-            out.println("      <explanation>");
-            out.println("      </explanation>");
-            out.println("    </location>");
-            out.println("  </file>");
-        }
-        out.println("</dataset>");
-        out.close();
-    }
-	
-	private void writeWithPrinttWriter(String path)
-			throws FileNotFoundException, IOException, InterruptedException{
-		
-		// set up print writer
+        // set up print writer
         FileWriter fw = new FileWriter(path, false);
         BufferedWriter bw = new BufferedWriter(fw);
         PrintWriter out = new PrintWriter(bw);
@@ -239,28 +143,100 @@ public class MarfcatIn {
         // iterate items and print
         for(int i = 0; i < items.size(); i++) {
             MarfcatInItem item = items.get(i);
-            out.println("  <file id=\"" + i + "\" path=\"" + item.getPath() + "\">");
-            out.println("    <meta>");
-            out.println("      <type>" + item.getType() + "</type>");
-            out.println("      <length lines=\"" + item.getLines() + "\" words=\"" 
-                    + item.getWords() + "\" bytes=\"" 
-                    + item.getBytes() + "\" />");
-            out.println("    </meta>");
-            out.println("    <location line=\"\" fraglines=\"\">");
-            out.println("      <meta>");
-            out.println("        <cve>" + item.getCVE() + "</cve>");
-            out.println("        <name cweid=\"\"></name>");
-            out.println("      </meta>");
-            out.println("      <fragment>");
-            out.println("      </fragment>");
-            out.println("      <explanation>");
-            out.println("      </explanation>");
-            out.println("    </location>");
-            out.println("  </file>");
+            out.println(item.toString());
         }
         
         // print closing tag
         out.println("</dataset>");
         out.close();
+    }
+    
+    public int getHighestId () 
+            throws FileNotFoundException, IOException {
+        int highestId = 1;
+        File file = new File(path);
+        if (!file.exists()) {
+            return highestId;
+        }
+        FileInputStream stream = new FileInputStream(file);
+        char c;
+        int i;
+        String idMatch = "<file id=\"";
+        int idMatchInt = 0;
+        String buffer = "";
+        boolean readId = false;
+        while ((i = stream.read()) != -1) {
+          c = (char) i;
+          if (readId) {
+              if (c != '"') {
+                  buffer += c;
+              } else {
+                  int id = Integer.parseInt(buffer); // TODO: I get an error when appending an existing file
+                  if (id > highestId) {
+                      highestId = id;
+                  }
+                  buffer = "";
+                  readId = false;
+                  idMatchInt = 0;
+              }
+          } else if (c == idMatch.charAt(idMatchInt)) {
+              idMatchInt += 1;
+              if (idMatchInt == idMatch.length()) {
+                  readId = true;
+              }
+          } else {
+              idMatchInt = 0;
+          }
+        }
+        stream.close();
+        
+        return highestId;
+    }
+    
+    /**
+     * Writes to the MARFCAT_IN file at the provided path.  If the file exists,
+     * it is appended to.  Otherwise, it is created.
+     * @param path The path to write to
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws InterruptedException 
+     */
+    public void append() 
+            throws FileNotFoundException, IOException, InterruptedException {
+  
+        int i;
+        
+        File file = new File(path);
+        if (!file.exists()) {
+            write();
+            return;
+        }
+        
+        RandomAccessFile f = new RandomAccessFile(file, "rw");
+        long length = f.length() - 1;
+        byte b;
+        do {                     
+          length -= 1;
+          f.seek(length);
+          b = f.readByte();
+        } while(b != 10);
+        f.setLength(length+1);
+        
+        FileWriter fw = new FileWriter(path, true);
+        BufferedWriter bw = new BufferedWriter(fw);
+        PrintWriter out = new PrintWriter(bw);
+        int id;
+        
+        for(i = 0; i < items.size(); i++) {
+            id = i + highestId + 1;
+            MarfcatInItem item = items.get(i);
+            out.println(item.toString());
+        }
+        out.println("</dataset>");
+        out.close();
+    }
+    
+    public String getPath () {
+        return path;
     }
 }

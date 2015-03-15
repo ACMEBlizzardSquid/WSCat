@@ -36,7 +36,8 @@ public class WSCat {
         MarfcatIn marfIn = new MarfcatIn();
         Marfcat marf = new Marfcat();
         marfIn.addItem(new MarfcatInItem(localPath));
-        String marfInPath = marfIn.write();
+        String marfInPath = marfIn.getPath();
+        marfIn.write();
         String MARFCAT_OUT = marf.analyze(marfInPath);    
         BufferedReader br = new BufferedReader(new FileReader(MARFCAT_OUT));
         StringBuilder sb = new StringBuilder();
@@ -121,7 +122,8 @@ public class WSCat {
         
         MarfcatIn marfIn = new MarfcatIn();
         marfIn.addItem(new MarfcatInItem(localPath, "CVE-2009-3548"));
-        String marfPath = marfIn.write();
+        String marfPath = marfIn.getPath();
+        marfIn.write();
         
         // train on MARFCAT_IN file
         Marfcat marf = new Marfcat();
