@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Categories</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/superagent/0.15.7/superagent.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+    </head>
+    <body>
+        <div class="jumbotron">
+            <div class="container">
+                <h1>Categories!</h1>
+                <p>
+                    This web client allows you to retrieve categories from the 
+                    REST API endpoint <code>/api/categories/{id}</code>.
+                </p>
+            </div>
+        </div>
+        <div class="container">
+            <label>
+                Optionally enter an ID to load a specific category.
+                Otherwise, load all.
+            </label>
+            <form class="form-inline">
+                <input id="category-id" class="form-control" type="number" placeholder="Category ID" />
+                <button id="btn-get" class="btn btn-primary">Load categories</button>
+            </form>
+            <table id="categories" class="table">
+            </table>
+            
+        </div>
+        <script>
+            
+            /**
+             * Builds a table header string for the categories table.
+             * @returns {String} The HTML table header
+             */
+            function buildTableHeader () {
+                var string = "<tr>";
+                string += "<th>ID</th>";
+                string += "<th>Category</th>";
+                string += "</tr>";
+                
+                return string;
+            }
+            
+            /**
+             * Builds a table row for a category
+             * @param {type} category The category to build a row for
+             * @returns {String} The HTML string for the table row
+             */
+            function buildTableRow (category) {
+                var string = "<tr>";
+                string += "<td>" + category.id + "</td>";
+                string += "<td>" + category.name + "</td>";
+                string += "</tr>";
+                
+                return string;
+            }
+            
+            /**
+             * Initiates a request to load all the categories
+             */
+            function getCategories (categoryID) {
+                superagent
+                        .get('api/categories/' + categoryID)
+                        .end(function (res) {
+                            if (res.status === 404) {
+                              noCategories();
+                            } else if (Array.isArray(res.body)) {
+                              loadCategories(res.body);  
+                            } else {
+                              loadCategories([res.body]);
+                            }
+                });
+            }
+            
+            /**
+             * Displays an error if no categories were found
+             */
+            function noCategories () {
+                var error = "<h2>No categories were found</h2>";
+                document.getElementById('categories').innerHTML = error;
+                
+            }
+            
+            /**
+             * Loads a JSON object containing categories into the DOM
+             */
+            function loadCategories (categories) {
+                var categoriesHTML = buildTableHeader();
+                categories.forEach(function (category) {
+                    categoriesHTML += buildTableRow(category);
+                });
+                
+                document.getElementById('categories').innerHTML = categoriesHTML;
+            }
+            
+            /**
+             * Binds event handlers when page is loaded
+             */
+            document.addEventListener('DOMContentLoaded', function () {
+                document.getElementById('btn-get').addEventListener('click', function (e) {
+                    var categoryID = document.getElementById('category-id').value;
+                    e.preventDefault();
+                    getCategories(categoryID);
+                });
+            });
+        </script>
+    </body>
+</html>
