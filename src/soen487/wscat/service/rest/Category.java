@@ -14,6 +14,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import soen487.wscat.marfcat.Marfcat;
 
 @Path("/categories")
@@ -22,7 +23,7 @@ public class Category {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
-    public String getCategory(@PathParam("id") int id) 
+    public Response getCategory(@PathParam("id") int id) 
             throws IOException {
         
         // get all marfcat categories
@@ -39,7 +40,7 @@ public class Category {
         
         String response;
         if (selection == null) {
-            response = "not found";
+            return Response.status(Response.Status.NOT_FOUND).build();
         } else {
             JsonBuilderFactory builder = Json.createBuilderFactory(null);
             response = builder.createObjectBuilder()
@@ -49,7 +50,7 @@ public class Category {
                     .toString();
         }
         
-        return response;
+        return Response.ok(response).build();
     }
     
     @GET
