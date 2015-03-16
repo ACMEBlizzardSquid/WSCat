@@ -61,6 +61,57 @@ public class MarfcatIn {
     }
     
     /**
+     * Retrieves a MarfcatInItem from the MARFCAT_IN file by id
+     * @param id The ID of the item to retrieve
+     * @return The MarfcatInItem, or null if it is not found
+     */
+    public MarfcatInItem getItemById (int id) 
+            throws FileNotFoundException, IOException {
+        System.out.println("RUNNING");
+        MarfcatInItem marfcatInItem = new MarfcatInItem();
+        File file = new File(path);
+        if (!file.exists()) {
+            return null;
+        }
+        FileInputStream stream = new FileInputStream(file);
+        int i;
+        char c;
+        boolean fileFound = false;
+        String fileIdString = "";
+        int fileId;
+        String filePattern = "<file=\"";
+        boolean readingFileId = false;
+        boolean foundFile = false;
+        int filePatternMatch = 0;
+        while ((i = stream.read()) != -1) {
+            c = (char) i;
+            if (filePattern.charAt(filePatternMatch) == c) {
+                filePatternMatch += 1;
+            } else {
+                filePatternMatch = 0;
+            }
+            if (filePatternMatch == filePattern.length() - 1) {
+                readingFileId = true;
+                System.out.println("reading file id");
+            }
+            if (readingFileId) {
+                if (c == '"') {
+                    readingFileId = false;
+                    fileId = Integer.parseInt(fileIdString);
+                    if (fileId == id) {
+                        foundFile = true;
+                        System.out.println("FOUND FILE ID " + fileId);
+                    }
+                } else {
+                    fileIdString += c;
+                }
+            }
+        }
+        stream.close();
+        return null;
+    }
+    
+    /**
      * Gets the unix 'file' utility version
      * @return The unix 'file' utility version
      */
