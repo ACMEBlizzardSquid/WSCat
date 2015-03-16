@@ -67,7 +67,7 @@ public class File {
                     line = br.readLine();
                 }
                 br.close();
-            } catch(Exception e) {
+            } catch(IOException | InterruptedException e) {
                 
             }
             return sb.toString();
@@ -77,7 +77,16 @@ public class File {
 	@PUT
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public String putFileEntry(@PathParam("id") int id, @FormParam("file") String fileEntry){
-		return Integer.toString(id) + " " + fileEntry;
+            //TODO: what does "update a file" mean ? should we get the wsdl again ? 
+            // sending a <file> over rest doesnt make much sense, so Im assuming 
+            //it has something to do with the WSDL.
+            try {
+                //For now, updating cve
+                //MarfcatInItem marfcatInItem = marfIn.updateItem(id);
+            } catch(IOException | InterruptedException e) {
+                
+            }
+            return Integer.toString(id) + " " + fileEntry;
 	}
 
 } 
