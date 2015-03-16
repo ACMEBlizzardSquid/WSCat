@@ -11,8 +11,6 @@ import java.io.RandomAccessFile;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 
 import soen487.wscat.marfcat.utils.StreamMonitor;
 
@@ -63,57 +61,6 @@ public class MarfcatIn {
     }
     
     /**
-     * Builds a MarfcatInItem from a given ID and string from the MARFCAT_IN
-     * file
-     * @param id The ID of the MarfcatInItem
-     * @param marfcatInString The string read from the MARFCAT_IN file
-     * @return A MarfcatInItem representing the item
-     */
-    private MarfcatInItem buildItem (int id, String marfcatInString) {
-        MarfcatInItem item = new MarfcatInItem();
-        Pattern cvePattern = Pattern.compile("<cve>(.*)</cve>");
-        Pattern linesPattern = Pattern.compile("lines=\"([0-9]*)\"");
-        Pattern wordsPattern = Pattern.compile("words=\"([0-9]*)\"");
-        Pattern bytesPattern = Pattern.compile("bytes=\"([0-9]*)\"");
-        Pattern pathPattern = Pattern.compile("path=\"([A-Za-z0-9/\\.]*)\"");
-        Matcher cveMatcher = cvePattern.matcher(marfcatInString);
-        Matcher linesMatcher = linesPattern.matcher(marfcatInString);
-        Matcher wordsMatcher = wordsPattern.matcher(marfcatInString);
-        Matcher bytesMatcher = bytesPattern.matcher(marfcatInString);
-        Matcher pathMatcher = pathPattern.matcher(marfcatInString);
-
-
-        if (linesMatcher.find()) {
-            int lines = Integer.parseInt(linesMatcher.group(1));
-            item.setLines(lines);
-        }
-
-        if (cveMatcher.find()) {
-            String cve = cveMatcher.group(1);
-            item.setCVE(cve);
-        }
-
-        if (wordsMatcher.find()) {
-            int words = Integer.parseInt(wordsMatcher.group(1));
-            item.setWords(words);
-        }
-
-        if (bytesMatcher.find()) {
-            int bytes = Integer.parseInt(bytesMatcher.group(1));
-            item.setBytes(bytes);
-        }
-
-        if (pathMatcher.find()) {
-            String path = pathMatcher.group(1);
-            item.setPath(path);
-        }
-
-        item.setId(id);
-        
-        return item;
-    }
-    
-    /**
      * Retrieves all MarfcatInItems in the MARFCAT_IN file
      * @return An array of all the MARFCAT_IN items
      */
@@ -161,7 +108,7 @@ public class MarfcatIn {
                 if (fileString.length() > 7) {
                     if (fileString.substring(fileString.length() - 7, fileString.length()).equals("</file>")) {
                         foundFile = false;
-                        items.add(buildItem(fileId, fileString));
+                        items.add(new MarfcatInItem(fileId, fileString));
                         fileString = "";
                     }
                 }
@@ -232,7 +179,7 @@ public class MarfcatIn {
         }
         stream.close();
         
-        return foundFile ? buildItem(id, fileString) : null;
+        return foundFile ? new MarfcatInItem(id, fileString) : null;
     }
     
     /**

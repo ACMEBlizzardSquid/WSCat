@@ -2,6 +2,8 @@ package soen487.wscat.marfcat;
 
 import java.io.IOException;
 import java.lang.InterruptedException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import soen487.wscat.marfcat.utils.StreamMonitor;
 
 /**
@@ -18,6 +20,69 @@ public class MarfcatInItem {
     private int words;
     private int lines;
     private int id;
+
+    public MarfcatInItem() {
+    }
+    
+    /**
+     * Builds a MarfcatInItem from a given ID and string from the MARFCAT_IN
+     * file
+     * @param id The ID of the MarfcatInItem
+     * @param marfcatInString The string read from the MARFCAT_IN file
+     */
+    public MarfcatInItem(int id, String marfcatInString) {
+        Pattern cvePattern = Pattern.compile("<cve>(.*)</cve>");
+        Pattern linesPattern = Pattern.compile("lines=\"([0-9]*)\"");
+        Pattern wordsPattern = Pattern.compile("words=\"([0-9]*)\"");
+        Pattern bytesPattern = Pattern.compile("bytes=\"([0-9]*)\"");
+        Pattern pathPattern = Pattern.compile("path=\"([A-Za-z0-9/\\.]*)\"");
+        Matcher cveMatcher = cvePattern.matcher(marfcatInString);
+        Matcher linesMatcher = linesPattern.matcher(marfcatInString);
+        Matcher wordsMatcher = wordsPattern.matcher(marfcatInString);
+        Matcher bytesMatcher = bytesPattern.matcher(marfcatInString);
+        Matcher pathMatcher = pathPattern.matcher(marfcatInString);
+
+
+        if (linesMatcher.find()) {
+            int lines = Integer.parseInt(linesMatcher.group(1));
+            this.setLines(lines);
+        }
+
+        if (cveMatcher.find()) {
+            String cve = cveMatcher.group(1);
+            this.setCVE(cve);
+        }
+
+        if (wordsMatcher.find()) {
+            int words = Integer.parseInt(wordsMatcher.group(1));
+            this.setWords(words);
+        }
+
+        if (bytesMatcher.find()) {
+            int bytes = Integer.parseInt(bytesMatcher.group(1));
+            this.setBytes(bytes);
+        }
+
+        if (pathMatcher.find()) {
+            String path = pathMatcher.group(1);
+            this.setPath(path);
+        }
+
+        //if no id passed, get id from file entry
+        if(id == -1) {
+            Pattern idPattern = Pattern.compile("<file id=\"(.*)\"");
+            Matcher idMatcher = idPattern.matcher(marfcatInString);
+            int fileId = Integer.parseInt(idMatcher.group(1));
+            this.setId(fileId);
+        } else {
+            this.setId(id);
+        }
+    }
+    
+    public MarfcatInItem(String marfcatInString) {
+        this(-1, marfcatInString);
+        
+    }
     
     public void loadFileInfo () 
             throws IOException, InterruptedException {
