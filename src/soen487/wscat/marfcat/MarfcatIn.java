@@ -11,6 +11,8 @@ import java.io.RandomAccessFile;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import soen487.wscat.marfcat.utils.StreamMonitor;
 
@@ -67,7 +69,7 @@ public class MarfcatIn {
      */
     public MarfcatInItem getItemById (int id) 
             throws FileNotFoundException, IOException {
-        System.out.println("RUNNING");
+        
         MarfcatInItem marfcatInItem = new MarfcatInItem();
         File file = new File(path);
         if (!file.exists()) {
@@ -79,36 +81,89 @@ public class MarfcatIn {
         boolean fileFound = false;
         String fileIdString = "";
         int fileId;
-        String filePattern = "<file=\"";
+        String filePattern = "<file id=\"";
+        String fileString = "";
         boolean readingFileId = false;
         boolean foundFile = false;
         int filePatternMatch = 0;
         while ((i = stream.read()) != -1) {
             c = (char) i;
-            if (filePattern.charAt(filePatternMatch) == c) {
-                filePatternMatch += 1;
-            } else {
-                filePatternMatch = 0;
-            }
-            if (filePatternMatch == filePattern.length() - 1) {
-                readingFileId = true;
-                System.out.println("reading file id");
-            }
-            if (readingFileId) {
-                if (c == '"') {
-                    readingFileId = false;
-                    fileId = Integer.parseInt(fileIdString);
-                    if (fileId == id) {
-                        foundFile = true;
-                        System.out.println("FOUND FILE ID " + fileId);
+            if (!foundFile) {
+                if (!readingFileId) {
+                    if (filePattern.charAt(filePatternMatch) == c) {
+                        filePatternMatch += 1;
+                    } else {
+                        filePatternMatch = 0;
+                    }
+                    if (filePatternMatch == filePattern.length()) {
+                        readingFileId = true;
+                        filePatternMatch = 0;
                     }
                 } else {
-                    fileIdString += c;
+                    if (c == '"') {
+                        readingFileId = false;
+                        fileId = Integer.parseInt(fileIdString);
+                        fileIdString = "";
+                        if (fileId == id) {
+                            foundFile = true;
+                        }
+                    } else {
+                        fileIdString += c;
+                    }
+                }
+            } else {
+                fileString += c;
+                if (fileString.length() > 7) {
+                    if (fileString.substring(fileString.length() - 7, fileString.length()).equals("</file>")) {
+                        break;
+                    }
                 }
             }
         }
         stream.close();
-        return null;
+        if (foundFile) {
+            MarfcatInItem item = new MarfcatInItem();
+            Pattern cvePattern = Pattern.compile("<cve>(.*)</cve>");
+            Pattern linesPattern = Pattern.compile("lines=\"([0-9]*)\"");
+            Pattern wordsPattern = Pattern.compile("words=\"([0-9]*)\"");
+            Pattern bytesPattern = Pattern.compile("bytes=\"([0-9]*)\"");
+            Pattern pathPattern = Pattern.compile("path=\"([A-Za-z0-9/\\.]*)\"");
+            Matcher cveMatcher = cvePattern.matcher(fileString);
+            Matcher linesMatcher = linesPattern.matcher(fileString);
+            Matcher wordsMatcher = wordsPattern.matcher(fileString);
+            Matcher bytesMatcher = bytesPattern.matcher(fileString);
+            Matcher pathMatcher = pathPattern.matcher(fileString);
+            
+            
+            if (linesMatcher.find()) {
+                int lines = Integer.parseInt(linesMatcher.group(1));
+                item.setLines(lines);
+            }
+            
+            if (cveMatcher.find()) {
+                String cve = cveMatcher.group(1);
+                item.setCVE(cve);
+            }
+            
+            if (wordsMatcher.find()) {
+                int words = Integer.parseInt(wordsMatcher.group(1));
+                item.setWords(words);
+            }
+            
+            if (bytesMatcher.find()) {
+                int bytes = Integer.parseInt(bytesMatcher.group(1));
+                item.setBytes(bytes);
+            }
+            
+            if (pathMatcher.find()) {
+                String path = pathMatcher.group(1);
+                item.setPath(path);
+            }
+            
+            return item;
+        } else {
+            return null;
+        }
     }
     
     /**

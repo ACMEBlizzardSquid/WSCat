@@ -48,12 +48,25 @@ public class MarfcatInTest {
             item2.setPath("test/soen487/wscat/marfcat/test2.txt");
             item1.loadFileInfo();
             item2.loadFileInfo();
+            marfcatIn.addItem(item1);
+            marfcatIn.addItem(item2);
             String path = marfcatIn.getPath();
             marfcatIn.write();
             
             marfcatIn = new MarfcatIn(path);
-            item1 = marfcatIn.getItemById(1);
-            item2 = marfcatIn.getItemById(2);
+            MarfcatInItem item1loaded = marfcatIn.getItemById(1);
+            MarfcatInItem item2loaded = marfcatIn.getItemById(2);
+            
+            assertEquals(item1loaded.getPath(), item1.getPath());
+            assertEquals(item2loaded.getPath(), item2.getPath());
+            assertEquals(item1loaded.getCVE(), item1.getCVE());
+            assertEquals(item2loaded.getCVE(), item2.getCVE());
+            assertEquals(item1loaded.getLines(), item1.getLines());
+            assertEquals(item2loaded.getLines(), item2.getLines());
+            assertEquals(item1loaded.getWords(), item1.getWords());
+            assertEquals(item2loaded.getWords(), item2.getWords());
+            assertEquals(item1loaded.getBytes(), item1.getBytes());
+            assertEquals(item2loaded.getBytes(), item2.getBytes());
         } catch (Exception e) {
             System.out.println(e);
             fail();
