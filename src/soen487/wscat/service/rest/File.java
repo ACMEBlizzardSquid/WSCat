@@ -104,12 +104,12 @@ public class File {
             //TODO: what does "update a file" mean ? should we get the wsdl again ? 
             // sending a <file> over rest doesnt make much sense, so Im assuming 
             //it has something to do with the WSDL.
-            try {
+            /*try {
                 //For now, updating cve
-                //MarfcatInItem marfcatInItem = marfIn.updateItem(id);
+                MarfcatInItem marfcatInItem = marfIn.updateItem(id);
             } catch(IOException | InterruptedException e) {
                 
-            }
+            }*/
             return Integer.toString(id) + " " + fileEntry;
 	}
 
