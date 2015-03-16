@@ -22,6 +22,8 @@ import soen487.xml.XMLReader;
 
 @Path("/files")
 public class File {
+    
+        private String MARFCAT_IN_PATH = "MARFCAT_IN.xml";
 
 	/**
 	 * Get the file entry in the repository at <code>id</code>
@@ -66,7 +68,7 @@ public class File {
                 String wsdlFile = XMLReader.readAsString(uri);
                 String localPath = FileDownloader.download(wsdlFile);
                 
-                MarfcatIn marfIn = new MarfcatIn();
+                MarfcatIn marfIn = new MarfcatIn(MARFCAT_IN_PATH);
                 Marfcat marf = new Marfcat();
                 MarfcatInItem marfcatInItem = new MarfcatInItem();
                 marfcatInItem.setPath(localPath);               
