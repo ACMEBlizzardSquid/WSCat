@@ -13,8 +13,8 @@ public class Pm2Client {
 	
 	public static final String TARGET_BASE = "http://localhost:8080/WSCat/api/";
 
-	public static StringBuffer doGetXML(int id) throws IOException{
-		URL target = new URL(TARGET_BASE+"files/"+id);
+	public static StringBuffer doGetXML() throws IOException{
+		URL target = new URL(TARGET_BASE+"files/");
 		HttpURLConnection connection = (HttpURLConnection)target.openConnection();
 		
 		//Get Response    
@@ -43,21 +43,23 @@ public class Pm2Client {
 		}
 		return response;
 	}
-	public static StringBuffer doPostXML(String WSDLUrl) throws IOException{
+	public static StringBuffer doPostXML(String file) throws IOException{
 		URL target = new URL(TARGET_BASE+"files/");
 		HttpURLConnection connection = (HttpURLConnection)target.openConnection();
 		connection.setRequestMethod("POST");
 		connection.setRequestProperty("Content-Type", 
-	           "application/x-www-form-urlencoded");
+	           "text/xml");
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
 
 	    connection.setRequestProperty("Content-Length", "" + 
-	               Integer.toString(WSDLUrl.getBytes().length));
+	               Integer.toString(file.getBytes().length));
 	    connection.setRequestProperty("Content-Language", "en-US");
 	    
 	    //Send request
 		DataOutputStream wr = new DataOutputStream (
 		            connection.getOutputStream ());
-		wr.writeBytes (WSDLUrl);
+		wr.writeBytes (file);
 		wr.flush ();
 		wr.close ();
 			
@@ -77,7 +79,7 @@ public class Pm2Client {
 		HttpURLConnection connection = (HttpURLConnection)target.openConnection();
 		connection.setRequestMethod("PUT");
 		connection.setRequestProperty("Content-Type", 
-	           "application/x-www-form-urlencoded");
+	           "text/xml");
 
 	    connection.setRequestProperty("Content-Length", "" + 
 	               Integer.toString(WSDLUrl.getBytes().length));
@@ -103,12 +105,12 @@ public class Pm2Client {
 	}
 	
 	public static int prompt(String msg){
-		System.out.print("Select[1-4]: ");
+		System.out.print(msg);
 		Scanner scan = new Scanner(System.in);
 		return scan.nextInt();
 	}
 	public static String promptStr(String msg){
-		System.out.print("Select[1-4]: ");
+		System.out.print(msg);
 		Scanner scan = new Scanner(System.in);
 		return scan.nextLine();
 	}
@@ -116,7 +118,7 @@ public class Pm2Client {
 	public static void main(String[] args) {
 		System.out.println("REST Java client PM2");
 		System.out.println("--- MENU ---\n"
-				+ "1. GET  file\n"
+				+ "1. GET  files\n"
 				+ "2. GET  log\n"
 				+ "3. POST file\n"
 				+ "4. PUT  file\n");
@@ -125,7 +127,7 @@ public class Pm2Client {
 			StringBuffer response;
 			switch(prompt("Select[1-4]: ")){
 			case 1:
-				response = doGetXML(prompt("Insert file id: "));
+				response = doGetXML();
 				System.out.println(response.toString());
 				break;
 			case 2:
@@ -133,11 +135,11 @@ public class Pm2Client {
 				System.out.println(response.toString());
 				break;
 			case 3:
-				response = doPostXML(promptStr("Insert WSDL Url: "));
+				response = doPostXML(promptStr("Insert <file>: "));
 				System.out.println(response.toString());
 				break;
 			case 4:
-				response = doPutXML(promptStr("Insert WSDL Url: "), prompt("Insert file id: "));
+				response = doPutXML(promptStr("Insert <file>: "), prompt("Insert file id: "));
 				System.out.println(response.toString());
 				break;
 			default:
