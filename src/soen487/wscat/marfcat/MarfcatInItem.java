@@ -79,13 +79,17 @@ public class MarfcatInItem {
     }
     
     /**
-     * Sets the path for the MarfcatInitem
+     * Sets the path for the MarfcatInItem
      * @param path The path to the MarfcatIn file
      */
     public void setPath (String path) {
         this.path = path;
     }
     
+    /**
+     * Sets the CVE for the MarfcatInItem
+     * @param cve The CVE to set
+     */
     public void setCVE (String cve) {
         this.cve = cve;
     }
@@ -99,11 +103,27 @@ public class MarfcatInItem {
     }
     
     /**
+     * Sets the type of this item
+     * @param type The type of this item
+     */
+    public void setType (String type) {
+        this.type = type;
+    }
+    
+    /**
      * Gets the number of lines in the item
      * @return The number of lines in the item
      */
     public int getLines () {
         return lines;
+    }
+    
+    /**
+     * Sets the number of lines in the item
+     * @param lines The number of lines in the item
+     */
+    public void setLines (int lines) {
+        this.lines = lines;
     }
     
     /**
@@ -115,11 +135,27 @@ public class MarfcatInItem {
     }
     
     /**
+     * Sets the number of words in this item
+     * @param words The number of words in the item
+     */
+    public void setWords (int words) {
+        this.words = words;
+    }
+    
+    /**
      * Gets the number of bytes in the item
      * @return The number of bytes in the item
      */
     public int getBytes () {
         return bytes;
+    }
+    
+    /**
+     * Sets the number of bytes in the item
+     * @param bytes The number of bytes in the item
+     */
+    public void setBytes (int bytes) {
+        this.bytes = bytes;
     }
     
     @Override
