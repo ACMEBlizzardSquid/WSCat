@@ -62,11 +62,15 @@ public class WSCat {
      */
     @WebMethod(operationName = "submitWSDLRepo")
     public List<String> submitWSDLRepo(@WebParam(name = "repoURI") String repoURI) 
-    		throws IOException, InterruptedException, IOException_Exception, InterruptedException_Exception{
+    		throws IOException, InterruptedException {
         WSDLRetrieverWebService_Service wsdlRetrieverService = new WSDLRetrieverWebService_Service();
         WSDLRetrieverWebService wsdlRetriever = wsdlRetrieverService.getWSDLRetrieverWebServicePort();
         
-        return wsdlRetriever.retrieveWSDLs(repoURI, null);
+        List<String> wsdls = null;
+        try {
+            wsdls = wsdlRetriever.retrieveWSDLs(repoURI, null);
+        } catch(Exception e) {};
+        return wsdls;
     }
 
     
