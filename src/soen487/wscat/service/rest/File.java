@@ -60,41 +60,50 @@ public class File {
             return outputString;
 	}
 
-    /**
-     * Insert a new file entry element in the repository
-     * @param uri
-     * @return
-     */
-	// TODO: Not clear if it consumes XML or produces XML (Question d)
+        /**
+         * Insert a new file entry element in the repository
+         * @param uri
+         * @return
+         */
 	@POST
-	@Consumes(MediaType.APPLICATION_XML)
-	public String postFileEntry(@FormParam("uri") String uri){
+	@Consumes(MediaType.TEXT_XML)
+	public String postFileEntry(@FormParam("file") String file){
             
             StringBuilder sb = new StringBuilder();
             try {
-                //download wsdl
-                String wsdlFile = XMLReader.readAsString(uri);
-                String localPath = FileDownloader.download(wsdlFile);
-                
-                MarfcatIn marfIn = new MarfcatIn(MARFCAT_IN_PATH);
                 Marfcat marf = new Marfcat();
-                MarfcatInItem marfcatInItem = new MarfcatInItem();
-                marfcatInItem.setPath(localPath);               
-                marfcatInItem.loadFileInfo();
+                MarfcatIn marfIn = new MarfcatIn(MARFCAT_IN_PATH);
+                
+                //get MarfcatInItem from post
+                MarfcatInItem marfcatInItem = new MarfcatInItem(file);  
+                
+                //save original wsdl uri to add in <description>
+                marfcatInItem.setOriginalWsdlUri(marfcatInItem.getPath());
+                
+                //download wsdl
+                String wsdlFile = XMLReader.readAsString(marfcatInItem.getPath());
+                String localPath = FileDownloader.download(wsdlFile);
+
+                //change <file> path to the just downloaded local wsdl
+                marfcatInItem.setPath(localPath);
+
+                //add to marfIn and analyze
                 marfIn.addItem(marfcatInItem);
                 String marfInPath = marfIn.getPath();
                 marfIn.write();
-                String MARFCAT_OUT = marf.analyze(marfInPath);    
-                BufferedReader br = new BufferedReader(new FileReader(MARFCAT_OUT));
+                String MARFCAT_OUT = marf.analyze(marfInPath); 
                 
+                
+                //Get results
+                BufferedReader br = new BufferedReader(new FileReader(MARFCAT_OUT));
                 String line = br.readLine();
-
                 while (line != null) {
                     sb.append(line);
                     sb.append("\n");
                     line = br.readLine();
                 }
                 br.close();
+                
             } catch(IOException | InterruptedException e) {
                 
             }
@@ -109,7 +118,7 @@ public class File {
 	 * @return
 	 */
 	@PUT
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Consumes(MediaType.TEXT_XML)
 	public String putFileEntry(@PathParam("id") int id, @FormParam("file") String fileEntry){
             //TODO: what does "update a file" mean ? should we get the wsdl again ? 
             // sending a <file> over rest doesnt make much sense, so Im assuming 
