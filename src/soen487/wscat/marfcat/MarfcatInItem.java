@@ -10,9 +10,9 @@ import soen487.wscat.marfcat.utils.StreamMonitor;
  */
 public class MarfcatInItem {
     
-    private String path;
-    private String cve;
-    private String type;
+    private String path = "";
+    private String cve = "";
+    private String type = "";
     private int bytes;
     private int words;
     private int lines;
