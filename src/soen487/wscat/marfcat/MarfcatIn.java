@@ -112,6 +112,67 @@ public class MarfcatIn {
         
         return item;
     }
+    
+    /**
+     * Retrieves all MarfcatInItems in the MARFCAT_IN file
+     * @return An array of all the MARFCAT_IN items
+     */
+    public ArrayList<MarfcatInItem> getAllItems () 
+            throws FileNotFoundException, IOException {
+        
+        ArrayList<MarfcatInItem> items = new ArrayList<MarfcatInItem>();
+        
+        File file = new File(path);
+        FileInputStream stream = new FileInputStream(file);
+        int i;
+        char c;
+        String fileIdString = "";
+        int fileId = 0;
+        String filePattern = "<file id=\"";
+        String fileString = "";
+        boolean readingFileId = false;
+        boolean foundFile = false;
+        int filePatternMatch = 0;
+        while ((i = stream.read()) != -1) {
+            c = (char) i;
+            if (!foundFile) {
+                if (!readingFileId) {
+                    if (filePattern.charAt(filePatternMatch) == c) {
+                        filePatternMatch += 1;
+                    } else {
+                        filePatternMatch = 0;
+                    }
+                    if (filePatternMatch == filePattern.length()) {
+                        readingFileId = true;
+                        filePatternMatch = 0;
+                    }
+                } else {
+                    if (c == '"') {
+                        readingFileId = false;
+                        fileId = Integer.parseInt(fileIdString);
+                        fileIdString = "";
+                        foundFile = true;
+                    } else {
+                        fileIdString += c;
+                    }
+                }
+            } else {
+                fileString += c;
+                if (fileString.length() > 7) {
+                    if (fileString.substring(fileString.length() - 7, fileString.length()).equals("</file>")) {
+                        foundFile = false;
+                        items.add(buildItem(fileId, fileString));
+                        fileString = "";
+                    }
+                }
+            }
+        }
+        stream.close();
+        
+        return items;
+    }
+    
+    /**
      * Retrieves a MarfcatInItem from the MARFCAT_IN file by id
      * @param id The ID of the item to retrieve
      * @return The MarfcatInItem, or null if it is not found
