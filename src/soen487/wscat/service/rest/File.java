@@ -3,6 +3,7 @@ package soen487.wscat.service.rest;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -33,10 +34,11 @@ public class File {
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
-    @Path("/{id}")
+        @Path("/{id}")
 	public String getFileEntry(@PathParam("id") int id) throws IOException{
-		// TODO
-		return Integer.toString(id);
+            MarfcatIn marfcatIn = new MarfcatIn(MARFCAT_IN_PATH);
+            MarfcatInItem item = marfcatIn.getItemById(id);
+            return item.toString();
 	}
     
 	/**
@@ -45,11 +47,17 @@ public class File {
 	 * @return
 	 * @throws IOException
 	 */
-    @GET
+        @GET
 	@Produces(MediaType.APPLICATION_XML)
-	public String getFileEntries(@PathParam("id") int id) throws IOException{
-    	// TODO
-		return Integer.toString(id);
+	public String getFileEntries() throws IOException {
+            MarfcatIn marfcatIn = new MarfcatIn(MARFCAT_IN_PATH);
+            ArrayList<MarfcatInItem> items = marfcatIn.getAllItems();
+            String outputString = "<files>";
+            for (MarfcatInItem item : items) {
+                outputString += item.toString();
+            }
+            outputString += "</files>";
+            return outputString;
 	}
 
     /**
