@@ -10,6 +10,11 @@ import javax.ws.rs.core.MediaType;
 public class Log {
 
 	//Question c
+	/**
+	 * Get the log
+	 * @param id
+	 * @return
+	 */
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getFileEntry(@PathParam("id") int id){

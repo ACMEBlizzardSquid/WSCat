@@ -36,6 +36,12 @@ public class FileDownloader {
         return path;
     }
     
+    /**
+     * @see #download(String, String)
+     * @param receivedFileContent
+     * @return The location of the temporary file
+     * @throws IOException
+     */
     public static String download (String receivedFileContent)
             throws IOException {
         return download(receivedFileContent, getRandomName());

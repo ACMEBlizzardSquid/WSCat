@@ -278,6 +278,12 @@ public class MarfcatIn {
         out.close();
     }
     
+    /**
+     * Get the highest id in the repository.
+     * @return the latest id assigned
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public int getHighestId () 
             throws FileNotFoundException, IOException {
         int highestId = 1;

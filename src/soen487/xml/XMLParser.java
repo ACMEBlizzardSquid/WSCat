@@ -17,11 +17,19 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
- *
+ * XML Formatter
+ * This class is an utility for printing an 
+ * human readable XML document
  * @author si_laroc
  */
 public class XMLParser {
     
+	/**
+	 * Get the pretty print representation of the XML
+	 * document starting at <code>node</code>
+	 * @param node W3C root node
+	 * @return stringify XML file.
+	 */
     public static String prettyPrint(Node node){
         return prettyPrint(node, "");
     }

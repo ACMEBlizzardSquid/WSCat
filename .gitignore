@@ -2,3 +2,7 @@
 /build/
 /nbproject/
 /build.xml
+.project
+.classpath
+.settings/
+

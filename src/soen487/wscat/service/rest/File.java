@@ -23,20 +23,38 @@ import soen487.xml.XMLReader;
 @Path("/files")
 public class File {
 
-	// Question c
+	/**
+	 * Get the file entry in the repository at <code>id</code>
+	 * @param id
+	 * @return the file entry element
+	 * @throws IOException
+	 */
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
-        @Path("/{id}")
+    @Path("/{id}")
 	public String getFileEntry(@PathParam("id") int id) throws IOException{
+		// TODO
 		return Integer.toString(id);
 	}
-        
-        @GET
+    
+	/**
+	 * Get all file entries
+	 * @param id
+	 * @return
+	 * @throws IOException
+	 */
+    @GET
 	@Produces(MediaType.APPLICATION_XML)
 	public String getFileEntries(@PathParam("id") int id) throws IOException{
+    	// TODO
 		return Integer.toString(id);
 	}
 
+    /**
+     * Insert a new file entry element in the repository
+     * @param uri
+     * @return
+     */
 	// TODO: Not clear if it consumes XML or produces XML (Question d)
 	@POST
 	@Consumes(MediaType.APPLICATION_XML)
@@ -74,6 +92,12 @@ public class File {
 	}
 
 	// Question e
+	/**
+	 * Update file entry element in repository
+	 * @param id
+	 * @param fileEntry
+	 * @return
+	 */
 	@PUT
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public String putFileEntry(@PathParam("id") int id, @FormParam("file") String fileEntry){
