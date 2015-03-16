@@ -13,6 +13,7 @@ public class MarfcatInItem {
     private String path = "";
     private String cve = "";
     private String type = "";
+    private String originalWsdlUri = "";
     private int bytes;
     private int words;
     private int lines;
@@ -156,6 +157,22 @@ public class MarfcatInItem {
      */
     public void setBytes (int bytes) {
         this.bytes = bytes;
+    }
+    
+    /**
+     * Gets the uri where the wsdl was fetched from
+     * @return 
+     */
+    public String getOriginalWsdlUri() {
+        return this.originalWsdlUri;
+    }
+    
+    /**
+     * Sets the uri where the wsdl was fetched from
+     * @param originalWsdlUri 
+     */
+    public void setOriginalWsdlUri(String originalWsdlUri) {
+        this.originalWsdlUri = originalWsdlUri;
     }
     
     @Override

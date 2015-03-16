@@ -249,6 +249,22 @@ public class MarfcatIn {
         out.println("    <marf-tool>");
         out.println(getMarfUtilityVersion());
         out.println("    </marf-tool>");
+        
+        //print all original wsdl URI's
+        out.println("       <table><tbody>");
+        for(int i = 0; i < items.size(); i++) {
+            MarfcatInItem item = items.get(i);
+            if(!item.getOriginalWsdlUri().isEmpty()) {
+                out.println("           <tr>");
+                out.println("               <td>" + "<a href=\"" + item.getOriginalWsdlUri() + "\">" + item.getOriginalWsdlUri() + "</a></td>");
+                out.println(item.getOriginalWsdlUri());
+                out.println("               <td>" + item.getCVE() + "</td>");
+                out.println("           </tr>");
+            }
+            
+        }
+        out.println("       </tbody></table>");
+        
         out.println("  </description>");
         
         // iterate items and print
