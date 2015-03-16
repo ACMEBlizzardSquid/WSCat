@@ -54,7 +54,11 @@ public class WSDLRetriever {
 				String path     = FileDownloader.download(page.getContent(), filename);
 				
 				// Save WDSL-Category relationship
-				marf.addItem(new MarfcatInItem(path, se.getValue()));
+                                MarfcatInItem item = new MarfcatInItem();
+                                item.setPath(path);
+                                item.setCVE(se.getValue());
+                                item.loadFileInfo();
+				marf.addItem(item);
 			} catch(IOException e){
 				e.printStackTrace();
 				continue;

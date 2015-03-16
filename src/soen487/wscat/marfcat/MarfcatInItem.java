@@ -18,17 +18,8 @@ public class MarfcatInItem {
     private int lines;
     private int id;
     
-    /**
-     * Generates a MarfcatInItem
-     * @param path The path to the file for the MarfcatInItem
-     * @param cve The category for the MarfcatInItem
-     */
-    public MarfcatInItem (String path, String cve) 
+    public void loadFileInfo () 
             throws IOException, InterruptedException {
-        
-        // assign information
-        this.path = path;
-        this.cve = cve;
         
         // get file info
         String command = "file " + path;
@@ -53,15 +44,6 @@ public class MarfcatInItem {
         lines = Integer.parseInt(tmp[1]);
         words = Integer.parseInt(tmp[2]);
         bytes = Integer.parseInt(tmp[3]);
-    }
-    
-    /**
-     * Generates a MarfcatInItem
-     * @param path The path to the file for the MarfcatInItem
-     */
-    public MarfcatInItem (String path) 
-            throws IOException, InterruptedException {
-        this(path, "");
     }
     
     /**
@@ -94,6 +76,18 @@ public class MarfcatInItem {
      */
     public String getCVE () {
         return cve;
+    }
+    
+    /**
+     * Sets the path for the MarfcatInitem
+     * @param path The path to the MarfcatIn file
+     */
+    public void setPath (String path) {
+        this.path = path;
+    }
+    
+    public void setCVE (String cve) {
+        this.cve = cve;
     }
     
     /**

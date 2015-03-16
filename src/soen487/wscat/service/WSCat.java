@@ -35,7 +35,10 @@ public class WSCat {
         String localPath = FileDownloader.download(wsdlFile);
         MarfcatIn marfIn = new MarfcatIn();
         Marfcat marf = new Marfcat();
-        marfIn.addItem(new MarfcatInItem(localPath));
+        MarfcatInItem marfcatInItem = new MarfcatInItem();
+        marfcatInItem.setPath(localPath);
+        marfcatInItem.loadFileInfo();
+        marfIn.addItem(marfcatInItem);
         String marfInPath = marfIn.getPath();
         marfIn.write();
         String MARFCAT_OUT = marf.analyze(marfInPath);    
@@ -121,7 +124,11 @@ public class WSCat {
         
         
         MarfcatIn marfIn = new MarfcatIn();
-        marfIn.addItem(new MarfcatInItem(localPath, "CVE-2009-3548"));
+        MarfcatInItem item = new MarfcatInItem();
+        item.setPath(localPath);
+        item.setCVE("CVE-2009-3548");
+        item.loadFileInfo();
+        marfIn.addItem(item);
         String marfPath = marfIn.getPath();
         marfIn.write();
         
