@@ -22,7 +22,7 @@ import soen487.wscat.parser.ProgrammableWebParser;
 import soen487.wscat.parser.WSCatParser;
 import soen487.wscat.parser.WSDLParser;
 
-@WebService
+@WebService(serviceName="WSDLRetrieverWebService", name="WSDLRetrieverWebService")
 public class WSDLRetriever {
 	
 	@WebMethod
