@@ -17,6 +17,12 @@ This service aims to use the MARF semantic capabilities to offer WSDL classifica
 ### Documentation
 This project provides a brief [description](README.md) of this system and its functionalities. Additionally, the appropriate Javadoc documentation can be generate with `make doc`.
 
+### Services
+The restful services are available at the following URL:
+ * http://localhost:8080/WSCat/api/categories/
+ * http://localhost:8080/WSCat/api/files/
+ * http://localhost:8080/WSCat/api/logs/
+
 ### User cases
  1. Submit an URL locating a WSDL for classification.
  2. Submit an URL locating a list of WSDLs to include in the dataset.
