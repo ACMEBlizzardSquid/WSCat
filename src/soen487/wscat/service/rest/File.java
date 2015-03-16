@@ -67,7 +67,7 @@ public class File {
          */
 	@POST
 	@Consumes(MediaType.TEXT_XML)
-	public String postFileEntry(@FormParam("file") String file){
+	public String postFileEntry(String file){
             
             StringBuilder sb = new StringBuilder();
             try {
@@ -119,7 +119,7 @@ public class File {
 	 */
 	@PUT
 	@Consumes(MediaType.TEXT_XML)
-	public String putFileEntry(@PathParam("id") int id, @FormParam("file") String fileEntry){
+	public String putFileEntry(@PathParam("id") int id, @PathParam("file") String fileEntry){
             //TODO: what does "update a file" mean ? should we get the wsdl again ? 
             // sending a <file> over rest doesnt make much sense, so Im assuming 
             //it has something to do with the WSDL.

@@ -70,10 +70,12 @@ public class MarfcatInItem {
 
         //if no id passed, get id from file entry
         if(id == -1) {
-            Pattern idPattern = Pattern.compile("<file id=\"(.*)\"");
+            Pattern idPattern = Pattern.compile("<file id=\"([^\"]*)\"");
             Matcher idMatcher = idPattern.matcher(marfcatInString);
-            int fileId = Integer.parseInt(idMatcher.group(1));
-            this.setId(fileId);
+            if(idMatcher.find()) {
+                int fileId = Integer.parseInt(idMatcher.group(1));
+                this.setId(fileId);
+            }
         } else {
             this.setId(id);
         }
