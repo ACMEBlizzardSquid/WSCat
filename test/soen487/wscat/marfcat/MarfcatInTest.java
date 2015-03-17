@@ -5,6 +5,12 @@
  */
 package soen487.wscat.marfcat;
 
+import java.util.HashMap;
+import java.util.Map;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonBuilderFactory;
+import javax.json.JsonObject;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -88,8 +94,23 @@ public class MarfcatInTest {
                     .append("</location>")
                 .append("</file>");
             
-            MarfcatInItem marfcatInItem = marfcatIn.updateItemById(1, sb.toString());
-            assertEquals(marfcatInItem.toString(), sb.toString());
+            // get marfcat categories
+            Marfcat marf = new Marfcat();
+            HashMap<String, Integer> categories = marf.getCategories();
+        
+            //creating some <file>'s in marfcatIN
+            MarfcatInItem marfcatInItem = null;
+            int id = 1;
+            for (Map.Entry<String, Integer> entry : categories.entrySet()) {
+                marfcatInItem = new MarfcatInItem(id++, sb.toString());
+                marfcatInItem.setCVE(entry.getKey());
+                marfcatIn.addItem(marfcatInItem);
+            }
+            marfcatIn.write();
+  
+            MarfcatInItem newMarfcatInItem = marfcatIn.updateItemById(1, sb.toString());
+            MarfcatInItem oldMarfcatInItem = new MarfcatInItem(1, sb.toString());
+            assertEquals(newMarfcatInItem.toString(), oldMarfcatInItem.toString());
         } catch (Exception e) {
             System.out.println(e);
             fail();

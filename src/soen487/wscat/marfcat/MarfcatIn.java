@@ -198,14 +198,17 @@ public class MarfcatIn {
     public MarfcatInItem updateItemById (int id, String fileEntry) 
             throws FileNotFoundException, IOException, InterruptedException {
         
+        if(id < 1) {
+            return null;
+        }
+        
         MarfcatInItem newMarfcatInItem = null;
         getAllItems();
-        MarfcatInItem marfcatInItem = items.get(id);
+        MarfcatInItem marfcatInItem = items.get(id - 1);
 
         if (marfcatInItem != null) {
-            items.remove(id);
             newMarfcatInItem = new MarfcatInItem(id, fileEntry);
-            items.add(id, newMarfcatInItem);
+            items.set(id - 1, newMarfcatInItem);
         }
         write();  
         return newMarfcatInItem;

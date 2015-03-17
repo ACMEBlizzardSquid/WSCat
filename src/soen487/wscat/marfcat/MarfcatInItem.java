@@ -35,7 +35,7 @@ public class MarfcatInItem {
         Pattern linesPattern = Pattern.compile("lines=\"([0-9]*)\"");
         Pattern wordsPattern = Pattern.compile("words=\"([0-9]*)\"");
         Pattern bytesPattern = Pattern.compile("bytes=\"([0-9]*)\"");
-        Pattern pathPattern = Pattern.compile("path=\"([A-Za-z0-9/\\.]*)\"");
+        Pattern pathPattern = Pattern.compile("path=\"([^\"]*)\"");
         Matcher cveMatcher = cvePattern.matcher(marfcatInString);
         Matcher linesMatcher = linesPattern.matcher(marfcatInString);
         Matcher wordsMatcher = wordsPattern.matcher(marfcatInString);
