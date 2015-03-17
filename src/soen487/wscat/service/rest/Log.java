@@ -1,23 +1,31 @@
 package soen487.wscat.service.rest;
 
+import java.io.IOException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import soen487.wscat.marfcat.Marfcat;
 
-@Path("logs/{id}")
+@Path("/logs")
 public class Log {
 
-	//Question c
-	/**
-	 * Get the log
-	 * @param id
-	 * @return
-	 */
+        @GET
+        @Produces(MediaType.TEXT_PLAIN)
+        public String getLogs() 
+                throws IOException {
+            Marfcat marfcat = new Marfcat();
+            return marfcat.getAllLogs();
+        }
+	
 	@GET
+        @Path("/{id}")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String getFileEntry(@PathParam("id") int id){
-		return Integer.toString(id);
+	public String getFileEntry(@PathParam("id") String id) 
+                throws IOException {
+            Marfcat marfcat = new Marfcat();
+            return marfcat.getLog(id);
 	}
-} 
+        
+}
