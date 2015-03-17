@@ -13,6 +13,11 @@ public class Pm2Client {
 	
 	public static final String TARGET_BASE = "http://localhost:8080/WSCat/api/";
 
+        /**
+         * Gets XML from the files endpoint
+         * @return XML from the files endpoint
+         * @throws IOException 
+         */
 	public static StringBuffer doGetXML() throws IOException{
 		URL target = new URL(TARGET_BASE+"files/");
 		HttpURLConnection connection = (HttpURLConnection)target.openConnection();
@@ -28,8 +33,14 @@ public class Pm2Client {
 		}
 		return response;
 	}
-	public static StringBuffer doGetText(int id) throws IOException{
-		URL target = new URL(TARGET_BASE+"logs/"+id);
+        
+        /**
+         * Gets the logs from the endpoint
+         * @return The logs string
+         * @throws IOException 
+         */
+	public static StringBuffer doGetText(String id) throws IOException{
+		URL target = new URL(TARGET_BASE+"logs/");
 		HttpURLConnection connection = (HttpURLConnection)target.openConnection();
 		
 		//Get Response    
@@ -43,6 +54,13 @@ public class Pm2Client {
 		}
 		return response;
 	}
+        
+        /**
+         * POSTs XML to the /files endpoint
+         * @param file The file to POST
+         * @return
+         * @throws IOException 
+         */
 	public static StringBuffer doPostXML(String file) throws IOException{
 		URL target = new URL(TARGET_BASE+"files/");
 		HttpURLConnection connection = (HttpURLConnection)target.openConnection();
@@ -74,6 +92,14 @@ public class Pm2Client {
 		}
 		return response;
 	}
+        
+        /**
+         * Updates a file at the /files/{id} endpoint
+         * @param file The updated file
+         * @param id The ID to update
+         * @return
+         * @throws IOException 
+         */
 	public static StringBuffer doPutXML(String file, int id) throws IOException{
                 URL target = new URL(TARGET_BASE+"files/"+id);
                 HttpURLConnection connection = (HttpURLConnection)target.openConnection();
@@ -106,11 +132,22 @@ public class Pm2Client {
                 return response;
 	}
 	
+        /**
+         * Prompts the user to enter an integer 
+         * @param msg The prompt to display to the user
+         * @return 
+         */
 	public static int prompt(String msg){
 		System.out.print(msg);
 		Scanner scan = new Scanner(System.in);
 		return scan.nextInt();
 	}
+        
+        /**
+         * Prompts the user to enter a string
+         * @param msg The prompt to display to the user
+         * @return 
+         */
 	public static String promptStr(String msg){
 		System.out.print(msg);
 		Scanner scan = new Scanner(System.in);
@@ -133,7 +170,7 @@ public class Pm2Client {
 				System.out.println(response.toString());
 				break;
 			case 2:
-				response = doGetText(prompt("Insert log id: "));
+				response = doGetText(promptStr("Insert log id: "));
 				System.out.println(response.toString());
 				break;
 			case 3:
