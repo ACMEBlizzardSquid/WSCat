@@ -395,13 +395,15 @@ public class MarfcatIn {
         
         RandomAccessFile f = new RandomAccessFile(file, "rw");
         long length = f.length() - 1;
-        byte b;
-        do {                     
-          length -= 1;
-          f.seek(length);
-          b = f.readByte();
-        } while(b != 10);
-        f.setLength(length+1);
+        if(length >= 0 ) {
+            byte b;
+            do {                     
+              length -= 1;
+              f.seek(length);
+              b = f.readByte();
+            } while(b != 10);
+            f.setLength(length+1);
+        }
         
         FileWriter fw = new FileWriter(path, true);
         BufferedWriter bw = new BufferedWriter(fw);
