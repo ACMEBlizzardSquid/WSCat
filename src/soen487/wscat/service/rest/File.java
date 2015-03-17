@@ -94,6 +94,7 @@ public class File {
                 marfIn.addItem(marfcatInItem);
                 String marfInPath = marfIn.getPath();
                 marfIn.write();
+                marf.train(marfInPath);
                 String MARFCAT_OUT = marf.analyze(marfInPath); 
                 
                 
