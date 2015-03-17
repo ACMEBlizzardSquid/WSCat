@@ -190,6 +190,34 @@ public class MarfcatIn {
     }
     
     /**
+     * Retrieves a MARFCAT_IN item from the list of items by its id
+     * @param id The ID to retrieve
+     * @return The MARFCAT_IN item with the specified ID
+     */
+    private MarfcatInItem getListItemById (int id) {
+        for (MarfcatInItem item : items) {
+            if (item.getId() == id) {
+                return item;
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Sets a MARFCAT_IN item in the list of items by its id
+     * @param id The ID of the item to set
+     * @param item The MARFCAT_IN item to set
+     */
+    private void setListItemById (int id, MarfcatInItem item) {
+        for (int i = 0; i < items.size(); i += 1) {
+            MarfcatInItem currentItem = items.get(i);
+            if (currentItem.getId() == id) {
+                items.set(i, item);
+            }
+        }
+    }
+    
+    /**
      * Updates a MarfcatInItem from the MARFCAT_IN file by id
      * @param id The ID of the item to retrieve
      * @param fileEntry the new <file> entry
@@ -204,11 +232,11 @@ public class MarfcatIn {
         
         MarfcatInItem newMarfcatInItem = null;
         items = getAllItems();
-        MarfcatInItem marfcatInItem = items.get(id - 1);
+        MarfcatInItem marfcatInItem = getListItemById(id);
 
         if (marfcatInItem != null) {
             newMarfcatInItem = new MarfcatInItem(id, fileEntry);
-            items.set(id - 1, newMarfcatInItem);
+            setListItemById(id, newMarfcatInItem);
         }
         write();  
         return newMarfcatInItem;
