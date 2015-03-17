@@ -29,7 +29,7 @@ public class MarfcatIn {
     
     private String rootPath;                // root application path
     private ArrayList<MarfcatInItem> items = new ArrayList<MarfcatInItem>();
-    private int highestId;
+    private int currentId;
     private String path;
     
     /**
@@ -55,7 +55,7 @@ public class MarfcatIn {
         this.path = path;
         
         // get highest Id
-        highestId = getHighestId();
+        this.currentId = getHighestId() + 1;
     }
     
     /**
@@ -63,7 +63,7 @@ public class MarfcatIn {
      * @param item The item to add
      */
     public void addItem (MarfcatInItem item) {
-        item.setId(highestId++);
+        item.setId(currentId);
         items.add(item);
     }
     
@@ -409,7 +409,7 @@ public class MarfcatIn {
         int id;
         
         for(i = 0; i < items.size(); i++) {
-            id = i + highestId + 1;
+            id = i + currentId + 1;
             MarfcatInItem item = items.get(i);
             out.println(item.toString());
         }
