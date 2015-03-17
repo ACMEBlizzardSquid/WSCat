@@ -25,7 +25,15 @@ public class Log {
 	public String getFileEntry(@PathParam("id") String id) 
                 throws IOException {
             Marfcat marfcat = new Marfcat();
-            return marfcat.getLog(id);
+            String response = "*************************************** \n";
+            response += " LOG \n";
+            response += "***************************************\n\n";
+            response += marfcat.getLog(id);
+            response += "\n\n*************************************** \n";
+            response += " ERROR \n";
+            response += "*************************************** \n\n";
+            response += marfcat.getErrorLog(id);
+            return response;
 	}
         
 }

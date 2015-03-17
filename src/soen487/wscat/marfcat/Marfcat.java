@@ -196,22 +196,27 @@ public class Marfcat {
     }
     
     public String getAllLogs () {
-        Pattern logPattern = Pattern.compile("log-([A-Za-z0-9]*)-console.txt");
-        Pattern errorPattern = Pattern.compile("log-([A-Za-z0-9]*)-error.txt");
+        Pattern logPattern = Pattern.compile("log-([A-Za-z0-9\\-\\_\\.]*)-console.txt");
+        Pattern errorPattern = Pattern.compile("log-([A-Za-z0-9\\-\\_\\.]*)-error.txt");
         File folder = new File(".");
         File[] listOfFiles = folder.listFiles();
         String output = "LOGS \n";
 
         for (int i = 0; i < listOfFiles.length; i++) {
           if (listOfFiles[i].isFile()) {
+            System.out.println(listOfFiles[i].getName());
             Matcher logMatcher = logPattern.matcher(listOfFiles[i].getName());
             Matcher errorMatcher = errorPattern.matcher(listOfFiles[i].getName());
             if (logMatcher.find()) {
-                output += "\n" + listOfFiles[i].getName();
+                output += "\n ********************************************* ";
+                output += "\n FILE: " + listOfFiles[i].getName();
+                output += "\n ********************************************* ";
                 output += "\n\n" + getLog(logMatcher.group(1));
             }
             if (errorMatcher.find()) {
-                output += "\n" + listOfFiles[i].getName();
+                output += "\n ********************************************* ";
+                output += "\n FILE: " + listOfFiles[i].getName();
+                output += "\n ********************************************* ";
                 output += "\n\n" + getErrorLog(errorMatcher.group(1));
             }
           }
