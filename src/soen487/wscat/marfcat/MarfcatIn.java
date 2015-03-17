@@ -203,7 +203,7 @@ public class MarfcatIn {
         }
         
         MarfcatInItem newMarfcatInItem = null;
-        getAllItems();
+        items = getAllItems();
         MarfcatInItem marfcatInItem = items.get(id - 1);
 
         if (marfcatInItem != null) {
