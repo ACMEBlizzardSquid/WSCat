@@ -93,7 +93,7 @@ public class File {
                 //add to marfIn and analyze
                 marfIn.addItem(marfcatInItem);
                 String marfInPath = marfIn.getPath();
-                marfIn.write();
+                marfIn.append();
                 marf.train(marfInPath);
                 String MARFCAT_OUT = marf.analyze(marfInPath); 
                 
