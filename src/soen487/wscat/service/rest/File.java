@@ -1,9 +1,12 @@
 package soen487.wscat.service.rest;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -119,17 +122,22 @@ public class File {
 	 */
 	@PUT
 	@Consumes(MediaType.TEXT_XML)
-	public String putFileEntry(@PathParam("id") int id, @PathParam("file") String fileEntry){
-            //TODO: what does "update a file" mean ? should we get the wsdl again ? 
-            // sending a <file> over rest doesnt make much sense, so Im assuming 
-            //it has something to do with the WSDL.
-            /*try {
-                //For now, updating cve
-                MarfcatInItem marfcatInItem = marfIn.updateItem(id);
-            } catch(IOException | InterruptedException e) {
+	public String putFileEntry(@PathParam("id") int id, String fileEntry){
+            StringBuilder sb = new StringBuilder();
+            try {
+                Marfcat marf = new Marfcat();
+                MarfcatIn marfIn = new MarfcatIn(MARFCAT_IN_PATH);
                 
-            }*/
-            return Integer.toString(id) + " " + fileEntry;
+                //Update <file>
+                MarfcatInItem marfcatInItem = marfIn.updateItemById(id, fileEntry);
+                
+                //Get results
+                sb.append(marfcatInItem.toString());
+                
+            } catch(IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+            return sb.toString();
 	}
 
 } 

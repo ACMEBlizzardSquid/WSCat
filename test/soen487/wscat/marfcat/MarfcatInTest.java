@@ -72,4 +72,27 @@ public class MarfcatInTest {
             fail();
         }
     }
+    
+    @Test
+    public void updateTest () {
+        try {
+            MarfcatIn marfcatIn = new MarfcatIn();
+            
+            StringBuilder sb = new StringBuilder();
+            sb.append("<file id=\"1\" path=\"apache-tomcat-5.5.13-src/build/resources/tomcat.spec\">")
+                    .append("<meta><type>ASCII English text</type><length lines=\"89\" words=\"341\" bytes=\"2565\"/></meta>")
+                    .append("<location line=\"\" fraglines=\"\">")
+                        .append("<meta><cve/><name cweid=\"\"/></meta>")
+                        .append("<fragment></fragment>")
+                        .append("<explanation></explanation>")
+                    .append("</location>")
+                .append("</file>");
+            
+            MarfcatInItem marfcatInItem = marfcatIn.updateItemById(1, sb.toString());
+            assertEquals(marfcatInItem.toString(), sb.toString());
+        } catch (Exception e) {
+            System.out.println(e);
+            fail();
+        }
+    }
 }

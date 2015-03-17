@@ -52,11 +52,11 @@ public class Pm2Client {
                 connection.setDoInput(true);
                 connection.setDoOutput(true);
 
-	    connection.setRequestProperty("Content-Length", "" + 
-	               Integer.toString(file.getBytes().length));
-	    connection.setRequestProperty("Content-Language", "en-US");
-	    
-	    //Send request
+                connection.setRequestProperty("Content-Length", "" + 
+                           Integer.toString(file.getBytes().length));
+                connection.setRequestProperty("Content-Language", "en-US");
+
+                //Send request
 		DataOutputStream wr = new DataOutputStream (
 		            connection.getOutputStream ());
 		wr.writeBytes (file);
@@ -74,34 +74,36 @@ public class Pm2Client {
 		}
 		return response;
 	}
-	public static StringBuffer doPutXML(String WSDLUrl, int id) throws IOException{
-		URL target = new URL(TARGET_BASE+"files/"+id);
-		HttpURLConnection connection = (HttpURLConnection)target.openConnection();
-		connection.setRequestMethod("PUT");
-		connection.setRequestProperty("Content-Type", 
-	           "text/xml");
+	public static StringBuffer doPutXML(String file, int id) throws IOException{
+                URL target = new URL(TARGET_BASE+"files/"+id);
+                HttpURLConnection connection = (HttpURLConnection)target.openConnection();
+                connection.setRequestMethod("PUT");
+                connection.setRequestProperty("Content-Type", 
+                   "text/xml");
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
 
-	    connection.setRequestProperty("Content-Length", "" + 
-	               Integer.toString(WSDLUrl.getBytes().length));
-	    connection.setRequestProperty("Content-Language", "en-US");
-	    
-	    //Send request
-		DataOutputStream wr = new DataOutputStream (
-		            connection.getOutputStream ());
-		wr.writeBytes (WSDLUrl);
-		wr.flush ();
-		wr.close ();
-			
-		//Get Response    
-		InputStream is = connection.getInputStream();
-		BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-		String line;
-		StringBuffer response = new StringBuffer(); 
-		while((line = rd.readLine()) != null) {
-		  response.append(line);
-		  response.append('\r');
-		}
-		return response;
+                connection.setRequestProperty("Content-Length", "" + 
+                           Integer.toString(file.getBytes().length));
+                connection.setRequestProperty("Content-Language", "en-US");
+
+                //Send request
+                DataOutputStream wr = new DataOutputStream (
+                            connection.getOutputStream ());
+                wr.writeBytes (file);
+                wr.flush ();
+                wr.close ();
+
+                //Get Response    
+                InputStream is = connection.getInputStream();
+                BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+                String line;
+                StringBuffer response = new StringBuffer(); 
+                while((line = rd.readLine()) != null) {
+                  response.append(line);
+                  response.append('\r');
+                }
+                return response;
 	}
 	
 	public static int prompt(String msg){

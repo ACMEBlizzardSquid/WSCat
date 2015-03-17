@@ -1,16 +1,23 @@
 package soen487.wscat.marfcat;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import soen487.wscat.marfcat.utils.StreamMonitor;
 
@@ -180,6 +187,28 @@ public class MarfcatIn {
         stream.close();
         
         return foundFile ? new MarfcatInItem(id, fileString) : null;
+    }
+    
+    /**
+     * Updates a MarfcatInItem from the MARFCAT_IN file by id
+     * @param id The ID of the item to retrieve
+     * @param fileEntry the new <file> entry
+     * @return The updated MarfcatInItem, or null if it is not found
+     */
+    public MarfcatInItem updateItemById (int id, String fileEntry) 
+            throws FileNotFoundException, IOException, InterruptedException {
+        
+        MarfcatInItem newMarfcatInItem = null;
+        getAllItems();
+        MarfcatInItem marfcatInItem = items.get(id);
+
+        if (marfcatInItem != null) {
+            items.remove(id);
+            newMarfcatInItem = new MarfcatInItem(id, fileEntry);
+            items.add(id, newMarfcatInItem);
+        }
+        write();  
+        return newMarfcatInItem;
     }
     
     /**
