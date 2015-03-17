@@ -122,6 +122,7 @@ public class File {
 	 */
 	@PUT
 	@Consumes(MediaType.TEXT_XML)
+        @Path("/{id}")
 	public String putFileEntry(@PathParam("id") int id, String fileEntry){
             StringBuilder sb = new StringBuilder();
             try {
