@@ -18,6 +18,7 @@ import org.rexcrawler.Page;
 import soen487.wscat.marfcat.MarfcatIn;
 import soen487.wscat.marfcat.MarfcatInItem;
 import soen487.wscat.marfcat.utils.FileDownloader;
+import soen487.wscat.parser.DocumentParser;
 import soen487.wscat.parser.ProgrammableWebParser;
 import soen487.wscat.parser.WSCatParser;
 import soen487.wscat.parser.WSDLParser;
@@ -31,7 +32,7 @@ public class WSDLRetriever {
 		return retrieve(pstrSeedURI, piLimit +1, new WSCatParser());
 	}
 	
-	private static List<String> retrieve(String rootSearch, int searchLimit, WSDLParser parser) 
+	private static List<String> retrieve(String rootSearch, int searchLimit, DocumentParser parser) 
 			throws IOException, InterruptedException {
 		
 		// Crawl
@@ -44,7 +45,7 @@ public class WSDLRetriever {
 		// Marfcat
 		MarfcatIn marf = new MarfcatIn();
 		
-		for(SimpleEntry<String, String> se : parser.getWSDLs()){
+		for(SimpleEntry<String, String> se : parser.get()){
 			System.out.println("\nCATEGORY: "+se.getValue()+" -- WSDL: "+se.getKey());
 			// Save WSDL
 			try{

@@ -17,10 +17,12 @@ import org.rexcrawler.Reduced;
  * Specific parser for 
  * http://www.programmableweb.com/apis/directory
  * 
+ * WSDL Parser
+ * 
  * @author shake0
  *
  */
-public class ProgrammableWebParser extends WSDLParser {
+public class ProgrammableWebParser extends DocumentParser {
 	
 	public ProgrammableWebParser() {
 		this.wsdls = new LinkedList<>();
@@ -95,6 +97,12 @@ public class ProgrammableWebParser extends WSDLParser {
 		return false;
 	}
 	
+	private boolean isWSDLLink(String url){
+		if(url.contains("WSDL") || url.contains("wsdl"))
+			return true;
+		return false;
+	}
+	
 	private String getCategory(String url){
 		if(url != null)
 			return url.substring(url.lastIndexOf('/') + 1);
@@ -124,7 +132,7 @@ public class ProgrammableWebParser extends WSDLParser {
 	// Data
 	
 	@Override
-	public List<SimpleEntry<String, String>> getWSDLs(){
+	public List<SimpleEntry<String, String>> get(){
 		return this.wsdls;
 	}
 	

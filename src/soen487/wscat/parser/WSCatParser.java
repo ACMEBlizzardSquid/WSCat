@@ -8,6 +8,7 @@ import java.util.ListIterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.rexcrawler.CrawlerHandler;
 import org.rexcrawler.Page;
 import org.rexcrawler.Reduced;
 
@@ -22,10 +23,16 @@ import org.rexcrawler.Reduced;
  * @author shake0
  *
  */
-public class WSCatParser extends WSDLParser {
+public class WSCatParser extends DocumentParser {
 		
 	public WSCatParser (){
 		this.wsdls = new LinkedList<SimpleEntry<String, String>>();
+	}
+	
+	protected boolean isWSDLLink(String url){
+		if(url.contains("WSDL") || url.contains("wsdl"))
+			return true;
+		return false;
 	}
 
 	@Override
@@ -66,7 +73,7 @@ public class WSCatParser extends WSDLParser {
 	}
 
 	@Override
-	public List<SimpleEntry<String, String>> getWSDLs() {
+	public List<SimpleEntry<String, String>> get() {
 		return this.wsdls;
 	}
 
