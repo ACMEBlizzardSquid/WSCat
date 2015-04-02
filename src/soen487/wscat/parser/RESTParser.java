@@ -14,30 +14,58 @@ import org.rexcrawler.Page;
 import org.rexcrawler.Reduced;
 
 /**
- * Specific parser for 
+ * REST Parser
+ * 
+ * Training parser based on 
  * http://www.programmableweb.com/apis/directory
- * 
- * WSDL Parser
- * 
+ *
  * @author shake0
  *
  */
-public class ProgrammableWebParser extends DocumentParser {
+public class RESTParser extends DocumentParser {
 	
-	public ProgrammableWebParser() {
-		this.wsdls = new LinkedList<>();
+	public RESTParser() {
+		this.rests = new LinkedList<>();
 		this.lastListingPage = new AtomicInteger(0);
 	}
 
 	@Override
 	public boolean parsePage(Page page) throws IOException {
-		if(isServicePage(page.getConnection().getURL())){
+		if(isServicePage(page.getConnection().getURL())){			
+			String categoryString = null, endpointString = null;
+			boolean prot = false;
+			
+			// Show processing
+			System.out.print(".");
+			
 			// Get category
-			String categoryRegex = "Primary Category</label>\\s*.span.\\s*.a href=\"([a-zA-Z0-9/]*)\"";
+			String categoryRegex = "Primary Category</label>\\s*.span.\\s*.a href=\"(.*?)\"";
 			Matcher match = Pattern.compile(categoryRegex, Pattern.DOTALL).matcher(page.getContent());
 			if(match.find()){
-				System.out.print(".");
-				this.categoryString = match.group(1);
+				categoryString = match.group(1);
+			}
+			else return true;
+			
+			// Get endpoint
+			String endpointRegex = "API Endpoint</label>\\s*.span.\\s*.a href=\"(.*?)\"";
+			match = Pattern.compile(endpointRegex, Pattern.DOTALL).matcher(page.getContent());
+			if(match.find()){
+				endpointString = match.group(1);
+			}
+			else return true;
+			
+			// Get protocol
+			String protocolRegex = "Protocol / Formats</label>\\s*.span.(.+?)./span";
+			match = Pattern.compile(protocolRegex, Pattern.DOTALL).matcher(page.getContent());
+			if(match.find()){
+				prot = match.group(1).contains("REST");
+			}
+			else return true;
+			
+			// Insert service
+			if(prot && categoryString != null && endpointString != null && !isWSDLLink(endpointString)){
+				this.rests.add(new SimpleEntry<String, String>
+				(endpointString, getCategory(categoryString)));
 			}
 		}
 		return true;
@@ -58,19 +86,6 @@ public class ProgrammableWebParser extends DocumentParser {
 				links.add(makeDirectoryURL(listingPage));
 		}
 		else{
-			ListIterator<String> it = links.listIterator();
-			String url, wsdl=null, category=null;
-			// Search for a WSDL link
-			while(it.hasNext()){
-				url = it.next();
-				if(isWSDLLink(url))     wsdl = url;
-				if(isCategoryLink(url)) category = url;
-			}
-			// Save WSDL link
-			if(wsdl != null && category != null){
-				this.wsdls.add(new SimpleEntry<String, String>
-				(wsdl, getCategory(categoryString)));
-			}
 			// No need to keep following this branch
 			links.clear();
 		}
@@ -97,16 +112,16 @@ public class ProgrammableWebParser extends DocumentParser {
 		return false;
 	}
 	
-	private boolean isWSDLLink(String url){
-		if(url.contains("WSDL") || url.contains("wsdl"))
-			return true;
-		return false;
-	}
-	
 	private String getCategory(String url){
 		if(url != null)
 			return url.substring(url.lastIndexOf('/') + 1);
 		return "";
+	}
+	
+	private boolean isWSDLLink(String url){
+		if(url.contains("WSDL") || url.contains("wsdl"))
+			return true;
+		return false;
 	}
 	
 	//--------------------------------------------
@@ -133,15 +148,14 @@ public class ProgrammableWebParser extends DocumentParser {
 	
 	@Override
 	public List<SimpleEntry<String, String>> get(){
-		return this.wsdls;
+		return this.rests;
 	}
 	
 	public static final String  ROOT   = "http://www.programmableweb.com/apis/directory";
 	public static final Integer NPAGES = 116;
 	
 	@Reduced
-	private List<SimpleEntry<String, String>> wsdls;
+	private List<SimpleEntry<String, String>> rests;
 	
-	private String        categoryString;
 	private AtomicInteger lastListingPage;
 }

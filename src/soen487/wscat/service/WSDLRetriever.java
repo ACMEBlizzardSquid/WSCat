@@ -19,9 +19,8 @@ import soen487.wscat.marfcat.MarfcatIn;
 import soen487.wscat.marfcat.MarfcatInItem;
 import soen487.wscat.marfcat.utils.FileDownloader;
 import soen487.wscat.parser.DocumentParser;
-import soen487.wscat.parser.ProgrammableWebParser;
-import soen487.wscat.parser.WSCatParser;
 import soen487.wscat.parser.WSDLParser;
+import soen487.wscat.parser.WSCatParser;
 
 @WebService(serviceName="WSDLRetrieverWebService", name="WSDLRetrieverWebService")
 public class WSDLRetriever {
@@ -77,7 +76,7 @@ public class WSDLRetriever {
 	@WebMethod(exclude=true)
 	public static void main(String[] args) throws IOException, InterruptedException {
 		// Grab ProgrammableWeb
-		retrieve(ProgrammableWebParser.ROOT, 100 , new ProgrammableWebParser());
+		retrieve(WSDLParser.ROOT, 100 , new WSDLParser());
 		// Example
 //		retrieve("http://data.serviceplatform.org/wsdl_grabbing/service_repository-wsdls/valid_WSDLs/", 
 //				10, new WSCatParser());
