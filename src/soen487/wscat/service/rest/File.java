@@ -108,8 +108,11 @@ public class File {
                 }
                 br.close();
                 
-            } catch(IOException | InterruptedException e) {
-                
+            } catch(IOException e) {
+                // Best catch ever 
+            } catch (InterruptedException e) {
+                // https://www.youtube.com/watch?v=NmSZwj4q3Lc
+                // OH MY, WHAT AN AMAZING PLAY
             }
             return sb.toString();
 	}
@@ -136,7 +139,11 @@ public class File {
                 //Get results
                 sb.append(marfcatInItem.toString());
                 
-            } catch(IOException | InterruptedException e) {
+            } catch(IOException e) {
+                // BIG CATCH
+                // https://www.youtube.com/watch?v=DTdkhkYgGno
+            } catch (InterruptedException e) {
+                
                 e.printStackTrace();
             }
             return sb.toString();

@@ -66,7 +66,7 @@ public class WSDLRetriever {
 		}
 		
 		// Write MARFCAT-IN
-		List<String> marfcatInPaths = new LinkedList<>();
+		List<String> marfcatInPaths = new LinkedList<String>();
                 marf.write();
 		marfcatInPaths.add(marf.getPath());
 		
