@@ -6,13 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.UUID;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import marf.apps.MARFCAT.MARFCATApp;
+import org.apache.commons.io.FileUtils;
 
 /**
  * MARFCAT
@@ -172,8 +171,7 @@ public class Marfcat {
     public String getLog (String id) {
         String path = "log-" + id + "-console.txt";
         try {
-            byte[] encoded = Files.readAllBytes(Paths.get(path));
-            return new String(encoded);
+            return FileUtils.readFileToString(new File(path));
         } catch (IOException e) {
             return null;
         }
@@ -188,8 +186,7 @@ public class Marfcat {
     public String getErrorLog (String id) {
         String path = "log-" + id + "-error.txt";
         try {
-            byte[] encoded = Files.readAllBytes(Paths.get(path));
-            return new String(encoded);
+            return FileUtils.readFileToString(new File(path));
         } catch (IOException e) {
             return null;
         }

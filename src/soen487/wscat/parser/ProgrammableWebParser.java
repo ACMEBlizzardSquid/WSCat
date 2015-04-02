@@ -25,7 +25,7 @@ import org.rexcrawler.Reduced;
 public class ProgrammableWebParser extends DocumentParser {
 	
 	public ProgrammableWebParser() {
-		this.wsdls = new LinkedList<>();
+		this.wsdls = new LinkedList<SimpleEntry<String, String>>();
 		this.lastListingPage = new AtomicInteger(0);
 	}
 
