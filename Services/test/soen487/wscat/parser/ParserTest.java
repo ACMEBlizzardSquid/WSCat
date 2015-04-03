@@ -1,14 +1,15 @@
 package soen487.wscat.parser;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.rexcrawler.Crawler;
 
 /** 
@@ -70,5 +71,20 @@ public class ParserTest {
 	public void parseRESTServiceWithMissingLink() throws IOException {
 		rs = parse(new URL("http://www.programmableweb.com/api/ebay"), new RESTParser());
 		assertEquals(0, rs.size());
+	}
+	
+	@Test
+	public void queryGoogleSearch() throws IOException {
+		rs = parse(new URL(WADLParser.BuildRequest("filetype:wadl")), new WADLParser());
+	}
+	
+	@Test
+	public void parseWADLService() throws IOException{
+		rs = parse(new URL("https://developer.cisco.com/media/wae_rest_api/application.wadl"), new WADLParser());
+		assertTrue(rs.size() > 0);
+		assertEquals("https://developer.cisco.com/media/wae_rest_api/application.wadl", rs.get(0).getKey());
+		assertEquals("<![CDATA[Allows user to cancel a persistent demand. " +
+				"Cancelled demand, although not removed from the system,<br>\n" +
+				"will not affect utilization calculations]]>", rs.get(0).getValue());
 	}
 }
