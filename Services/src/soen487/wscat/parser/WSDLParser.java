@@ -25,7 +25,7 @@ import org.rexcrawler.Reduced;
 public class WSDLParser extends DocumentParser {
 	
 	public WSDLParser() {
-		this.wsdls = new LinkedList<>();
+		this.wsdls = new LinkedList<SimpleEntry<String,String>>();
 		this.lastListingPage = new AtomicInteger(0);
 	}
 

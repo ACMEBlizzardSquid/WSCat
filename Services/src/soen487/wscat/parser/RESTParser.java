@@ -25,7 +25,7 @@ import org.rexcrawler.Reduced;
 public class RESTParser extends DocumentParser {
 	
 	public RESTParser() {
-		this.rests = new LinkedList<>();
+		this.rests = new LinkedList<SimpleEntry<String,String>>();
 		this.lastListingPage = new AtomicInteger(0);
 	}
 
