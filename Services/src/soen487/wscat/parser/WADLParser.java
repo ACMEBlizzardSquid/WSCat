@@ -26,7 +26,7 @@ import org.rexcrawler.Reduced;
 public class WADLParser extends DocumentParser {
 	
 	public WADLParser() {
-		this.wadls = new LinkedList<>();
+		this.wadls = new LinkedList<SimpleEntry<String, String>>();
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class WADLParser extends DocumentParser {
 	}
 	
 	private List<String> getResultLinks(List<String> links){
-		List<String> results = new ArrayList<>();
+		List<String> results = new ArrayList<String>();
 		for(String link: links){
 			if(link.startsWith("/url?")){
 				Matcher m = Pattern.compile("q=(.*?)&amp").matcher(link);
