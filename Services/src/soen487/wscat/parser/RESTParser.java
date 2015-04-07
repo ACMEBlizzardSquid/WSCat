@@ -13,6 +13,8 @@ import java.util.regex.Pattern;
 import org.rexcrawler.Page;
 import org.rexcrawler.Reduced;
 
+import soen487.wscat.marfcat.MarfcatIn;
+
 /**
  * REST Parser
  * 
@@ -141,7 +143,7 @@ public class RESTParser extends DocumentParser {
 		if(pageNumber > 0)
 			base += "?page="+pageNumber;
 		return base;
-	}
+	}	
 	
 	//--------------------------------------------
 	// Data
@@ -149,6 +151,11 @@ public class RESTParser extends DocumentParser {
 	@Override
 	public List<SimpleEntry<String, String>> get(){
 		return this.rests;
+	}
+
+	@Override
+	public URL getRoot() throws IOException {
+		return new URL(RESTParser.ROOT);
 	}
 	
 	public static final String  ROOT   = "http://www.programmableweb.com/apis/directory";
@@ -158,4 +165,12 @@ public class RESTParser extends DocumentParser {
 	private List<SimpleEntry<String, String>> rests;
 	
 	private AtomicInteger lastListingPage;
+	
+	//--------------------------------------------
+	// Main
+	public static void main(String[] args) throws IOException, InterruptedException {
+		final String marfcatInPath = "/tmp/REST_trainset.marfcatin";
+		MarfcatIn trainFile = new RESTParser().getTrainSet(marfcatInPath, 100);
+		trainFile.write();
+	}
 }

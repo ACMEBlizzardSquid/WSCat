@@ -1,6 +1,7 @@
 package soen487.wscat.parser;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.LinkedList;
@@ -10,8 +11,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.rexcrawler.Crawler;
 import org.rexcrawler.Page;
 import org.rexcrawler.Reduced;
+
+import soen487.wscat.marfcat.MarfcatIn;
+import soen487.wscat.marfcat.MarfcatInItem;
 
 /**
  * WSDL Parser
@@ -151,11 +156,24 @@ public class WSDLParser extends DocumentParser {
 		return this.wsdls;
 	}
 	
+	@Override
+	public URL getRoot() throws IOException {
+		return new URL(WSDLParser.ROOT);
+	}
+	
 	public static final String  ROOT   = "http://www.programmableweb.com/apis/directory";
 	public static final Integer NPAGES = 116;
 	
 	@Reduced
 	private List<SimpleEntry<String, String>> wsdls;
 	
-	private AtomicInteger lastListingPage;
+	private AtomicInteger lastListingPage;	
+	
+	//--------------------------------------------
+	// Main
+	public static void main(String[] args) throws IOException, InterruptedException {
+		final String marfcatInPath = "/tmp/WSDL_trainset.marfcatin";
+		MarfcatIn trainFile = new WSDLParser().getTrainSet(marfcatInPath, 100);
+		trainFile.write();
+	}
 }
