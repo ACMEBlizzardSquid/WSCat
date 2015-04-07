@@ -101,6 +101,7 @@ public class Marfcat {
             "-raw",
             "-fft",
             "-eucl",
+            "-dynaclass",
             inputFilePath
         };
         redirectOutput();
