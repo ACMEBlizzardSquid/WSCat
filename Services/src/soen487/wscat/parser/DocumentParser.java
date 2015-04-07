@@ -8,6 +8,7 @@ import java.util.List;
 import org.rexcrawler.Crawler;
 import org.rexcrawler.CrawlerHandler;
 
+import soen487.wscat.marfcat.utils.FileDownloader;
 import soen487.wscat.marfcat.MarfcatIn;
 import soen487.wscat.marfcat.MarfcatInItem;
 
@@ -37,7 +38,8 @@ public abstract class DocumentParser extends CrawlerHandler{
 	 * @return the MARCATIN object
 	 * @throws IOException
 	 */
-	public MarfcatIn getTrainSet(String path, int length) throws IOException{
+	public MarfcatIn getTrainSet(String path, int length) 
+                throws IOException, InterruptedException {
 		new Crawler()
 		.setHandler(this)
 		.setChunkSize(2)
@@ -46,10 +48,13 @@ public abstract class DocumentParser extends CrawlerHandler{
 		
 		MarfcatIn trainSet = new MarfcatIn(path);
 		for(SimpleEntry<String, String>entry: this.get()){
-			MarfcatInItem item = new MarfcatInItem();
-			item.setOriginalWsdlUri(entry.getKey());
-			item.setCVE(entry.getValue());
-			trainSet.addItem(item);
+                    MarfcatInItem item = new MarfcatInItem();
+                    String filepath = FileDownloader.download(entry.getKey());
+                    item.setPath(filepath);
+                    item.setCVE(entry.getValue());
+                    item.setOriginalWsdlUri(entry.getKey());
+                    item.loadFileInfo();
+                    trainSet.addItem(item);
 		}
 		return trainSet;
 	}
