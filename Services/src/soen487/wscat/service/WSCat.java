@@ -31,27 +31,42 @@ import soen487.wscat.parser.ParserFactory;
 public class WSCat {
 	
 	@Resource private WebServiceContext context;
+	private boolean initialized = false;
+	private String type = null;
 	/**
 	 * Initialization
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	@PostConstruct
 	@WebMethod(exclude=true)
+	@PostConstruct
 	public void initialize(){
 //		try{
 //			ServletContext servletContext = (ServletContext) context.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
-//			String type = servletContext.getInitParameter("WSCAT.type");
+//			type = servletContext.getInitParameter("WSCAT.type");
+//			type = "WSDL";
 //			if(type == null)
 //				throw new IOException("Invalid WSCAT.type");
-//			String marfcatInPath = "/tmp/TrainSet.marfcatin";
+//			String marfcatInPath = "TrainSet.marfcatin";
 //			MarfcatIn trainFile = ParserFactory.getInstance(type).getTrainSet(marfcatInPath, 10);
 //			trainFile.write();
+			initialized=true;
 //		}
-//		catch(IOException e) {}
-//		catch(InterruptedException e) {}
+//		catch(IOException e) { System.err.println(e.getLocalizedMessage());}
+//		catch(InterruptedException e) { System.err.println(e.getLocalizedMessage());}
+	}
+	
+	@WebMethod(operationName = "isInitialized")
+	public boolean isInitialized() {
+		ServletContext servletContext = (ServletContext) context.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
+		type = servletContext.getInitParameter("WSCAT.type");
+		return initialized;
 	}
 
+	public String getType() {
+		return type;
+	}
+	
     /**
      * Submits a file to analyze 
      * @param file The string representation of the file
