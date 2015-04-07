@@ -38,7 +38,7 @@ public class FileDownloader {
     
     /**
      * @see #download(String, String)
-     * @param receivedFileContent
+     * @param receivedFileContent The file to download
      * @return The location of the temporary file
      * @throws IOException
      */
