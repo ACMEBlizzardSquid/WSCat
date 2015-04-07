@@ -22,17 +22,17 @@ import soen487.wscat.marfcat.utils.FileDownloader;
 public class WSCat {
 
     /**
-     * Submits a WSDL file to analyze 
-     * @param wsdlFile The string representation of the WSDL file
+     * Submits a file to analyze 
+     * @param file The string representation of the file
      * @return The MARFCAT_IN output
      * @throws IOException
      * @throws InterruptedException 
      */
-    @WebMethod(operationName = "submitWSDLToAnalyze")
-    public String submitWSDLToAnalyze(@WebParam(name = "wsdlFile") String wsdlFile) 
+    @WebMethod(operationName = "analyzeFile")
+    public String analyzeFile(@WebParam(name = "file") String file) 
             throws IOException, InterruptedException {
         
-        String localPath = FileDownloader.download(wsdlFile);
+        String localPath = FileDownloader.download(file);
         MarfcatIn marfIn = new MarfcatIn();
         Marfcat marf = new Marfcat();
         MarfcatInItem marfcatInItem = new MarfcatInItem();
@@ -75,25 +75,27 @@ public class WSCat {
 
     
     /**
-     * Trains Marfcat on a provided WSDL file
-     * @param wsdlFile A string representation of the WSDL file 
+     * Trains Marfcat on a provided file
+     * @param file A string representation of the file 
+     * @param category The category that the file belongs to
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException
      * @throws InterruptedException 
      */
-    @WebMethod(operationName = "trainOnWSDL")
-    public void trainOnWSDL (@WebParam(name = "wsdlFile") String wsdlFile) 
+    @WebMethod(operationName = "trainOnFile")
+    public void trainOnFile (
+            @WebParam(name = "file") String file, 
+            @WebParam(name = "category") String category
+    ) 
             throws ParserConfigurationException, SAXException, IOException,
                     InterruptedException {
         
-        // format the WSDL file
-        String localPath = FileDownloader.download(wsdlFile);
-       //FIXME
-        //String documentation = utils.wsdl.WSDL.getDocumentation(wsdlFile);
+        // download the file
+        String localPath = FileDownloader.download(file);
 
         // submit the file for training
-        //train(localPath, documentation);
+        train(localPath, category);
     }
     
     /**
@@ -119,18 +121,18 @@ public class WSCat {
     }
     
     /**
-     * Trains Marfcat on a locally saved WSDL file
-     * @param localPath The local path of the WSDL file
-     * @param subject The subject of the WSDL file
+     * Trains Marfcat on a locally saved file
+     * @param localPath The local path of the file
+     * @param category The subject of the file
      */
-    private void train (String localPath, String subject) 
+    private void train (String localPath, String category) 
             throws IOException, InterruptedException {
         
         
         MarfcatIn marfIn = new MarfcatIn();
         MarfcatInItem item = new MarfcatInItem();
         item.setPath(localPath);
-        item.setCVE("CVE-2009-3548");
+        item.setCVE(category);
         item.loadFileInfo();
         marfIn.addItem(item);
         String marfPath = marfIn.getPath();
