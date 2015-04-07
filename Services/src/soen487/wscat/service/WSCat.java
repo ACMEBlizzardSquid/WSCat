@@ -81,7 +81,7 @@ public class WSCat {
             sb.append(line);
             sb.append("\n");
             line = br.readLine();
-    }
+        }
         br.close();
         return sb.toString();
     }
@@ -115,7 +115,7 @@ public class WSCat {
      * @throws InterruptedException 
      */
     @WebMethod(operationName = "trainOnFile")
-    public void trainOnFile (
+    public String trainOnFile (
             @WebParam(name = "file") String file, 
             @WebParam(name = "category") String category
     ) 
@@ -126,7 +126,7 @@ public class WSCat {
         String localPath = FileDownloader.download(file);
 
         // submit the file for training
-        train(localPath, category);
+        return train(localPath, category);
     }
     
     /**
@@ -156,7 +156,7 @@ public class WSCat {
      * @param localPath The local path of the file
      * @param category The subject of the file
      */
-    private void train (String localPath, String category) 
+    private String train (String localPath, String category) 
             throws IOException, InterruptedException {
         
         
@@ -171,6 +171,17 @@ public class WSCat {
         
         // train on MARFCAT_IN file
         Marfcat marf = new Marfcat();
-        marf.train(marfPath);
+        String STDOUT = marf.train(marfPath);
+        BufferedReader br = new BufferedReader(new FileReader(STDOUT));
+        StringBuilder sb = new StringBuilder();
+        String line = br.readLine();
+
+        while (line != null) {
+            sb.append(line);
+            sb.append("\n");
+            line = br.readLine();
+    }
+        br.close();
+        return sb.toString();
     }
 }

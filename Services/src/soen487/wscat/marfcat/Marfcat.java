@@ -46,20 +46,22 @@ public class Marfcat {
     /**
      * Redirect STDOUT and STDERR to a randomly generated log files
      * @throws FileNotFoundException 
+     * @return The path to the STDOUT log file
      */
-    private void redirectOutput () 
+    private String redirectOutput () 
             throws FileNotFoundException {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         System.out.println(uuid);
-        redirectOutput(uuid);
+        return redirectOutput(uuid);
     }
     
     /**
      * Redirects STDOUT and STDERR to log files
      * @param file The prefix of the redirect
      * @throws FileNotFoundException 
+     * @return The path to the STDOUT log file
      */
-    private void redirectOutput (String file) 
+    private String redirectOutput (String file) 
             throws FileNotFoundException {
         String prefix = "log-";
         consoleFile = new File(prefix + file + "-console.txt");
@@ -70,6 +72,7 @@ public class Marfcat {
         errorPrinter = new PrintStream(errorOut);
         System.setOut(consolePrinter);
         System.setErr(errorPrinter);
+        return prefix + file + "-console.txt";
     }
     
     /**
@@ -90,8 +93,9 @@ public class Marfcat {
      * Trains MARFCAT on a supplied MARFCAT_IN file
      * @param inputFilePath The path to the MARFCAT_IN file
      * @throws IOException
+     * @return the path to the file containing STDOUT for the MARFCAT call
      */
-    public void train (String inputFilePath) 
+    public String train (String inputFilePath) 
             throws IOException, InterruptedException {
         
         // execute job
@@ -104,14 +108,14 @@ public class Marfcat {
             "-dynaclass",
             inputFilePath
         };
-        redirectOutput();
+        String stdoutPath = redirectOutput();
         try {
             marf.apps.MARFCAT.MARFCATApp.main(options);
         } catch (Exception e) {
             System.out.println(e);
         }
         resetOutput();
-        
+        return rootPath + "/" + stdoutPath;
     }
     
     /**
