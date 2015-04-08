@@ -69,9 +69,6 @@
                     <condition>contains($AnalyzeIn.type, 'WSDL')</condition>
                         <pick name="Pick1">
                             <onMessage partnerLink="WSDLCallback" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" portType="tns:Response" variable="WSDLAnalyzeOut">
-                                <correlations>
-                                    <correlation set="wzrd_set_Invoke1_OnMessage_Pick1_Analyze" initiate="no"/>
-                                </correlations>
                                 <assign name="Assign5">
                                     <copy>
                                         <from>concat($WSDLAnalyzeOut.category, $AnalyzeOut.category)</from>
@@ -101,9 +98,6 @@
                     <condition>contains('REST', $AnalyzeIn.type)</condition>
                         <pick name="Pick2">
                             <onMessage partnerLink="RESTCallback" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" portType="tns:Response" variable="RESTAnalyzeOut">
-                                <correlations>
-                                    <correlation set="wzrd_set_Invoke2_OnMessage_Pick2_Analyze" initiate="no"/>
-                                </correlations>
                                 <assign name="Assign6">
                                     <copy>
                                         <from>concat($RESTAnalyzeOut.category, $AnalyzeOut.category)</from>
@@ -133,9 +127,6 @@
                     <condition>contains('WADL', $AnalyzeIn.type)</condition>
                         <pick name="Pick3">
                             <onMessage partnerLink="WADLCallback" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" portType="tns:Receive" variable="WADLAnalyzeOut">
-                                <correlations>
-                                    <correlation set="wzrd_set_Invoke3_OnMessage_Pick3_Analyze" initiate="no"/>
-                                </correlations>
                                 <assign name="Assign7">
                                     <copy>
                                         <from>concat($WADLAnalyzeOut.category, $AnalyzeOut.category)</from>
