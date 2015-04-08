@@ -13,6 +13,14 @@
     <message name="AnalyzeResponse">
         <part name="category" type="xsd:string"/>
     </message>
+    <message name="TrainRequest">
+        <part name="file" type="xsd:string"/>
+        <part name="category" type="xsd:string"/>
+        <part name="type" type="xsd:string"/>
+    </message>
+    <message name="TrainResponse">
+        <part name="response" type="xsd:string"/>
+    </message>
     <portType name="WSCatServicesPortType">
         <operation name="Initialize">
             <input name="input1" message="tns:InitializeRequest"/>
@@ -21,6 +29,10 @@
         <operation name="Analyze">
             <input name="input2" message="tns:AnalyzeRequest"/>
             <output name="output2" message="tns:AnalyzeResponse"/>
+        </operation>
+        <operation name="Train">
+            <input name="input3" message="tns:TrainRequest"/>
+            <output name="output3" message="tns:TrainResponse"/>
         </operation>
     </portType>
     <plnk:partnerLinkType name="WSCatServices">
