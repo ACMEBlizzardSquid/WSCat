@@ -60,12 +60,7 @@
                     <condition>contains($AnalyzeIn.type, 'WSDL')</condition>
                         <pick name="Pick1">
                             <onMessage partnerLink="WSDLCallback" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" portType="tns:Response" variable="WSDLAnalyzeOut">
-                                <assign name="Assign5">
-                                    <copy>
-                                        <from>concat($WSDLAnalyzeOut.category, $AnalyzeOut.category)</from>
-                                        <to variable="AnalyzeOut" part="category"/>
-                                    </copy>
-                                </assign>
+                                <empty name="Empty1"/>
                             </onMessage>
                                 <onAlarm>
                                     <for>'P0Y0M0DT0H0M5.0S'</for>
@@ -86,12 +81,7 @@
                     <condition>contains('REST', $AnalyzeIn.type)</condition>
                         <pick name="Pick2">
                             <onMessage partnerLink="RESTCallback" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" portType="tns:Response" variable="RESTAnalyzeOut">
-                                <assign name="Assign6">
-                                    <copy>
-                                        <from>concat($RESTAnalyzeOut.category, $AnalyzeOut.category)</from>
-                                        <to variable="AnalyzeOut"/>
-                                    </copy>
-                                </assign>
+                                <empty name="Empty2"/>
                             </onMessage>
                                 <onAlarm>
                                     <for>'P0Y0M0DT0H0M5.0S'</for>
@@ -112,12 +102,7 @@
                     <condition>contains('WADL', $AnalyzeIn.type)</condition>
                         <pick name="Pick3">
                             <onMessage partnerLink="WADLCallback" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" portType="tns:Receive" variable="WADLAnalyzeOut">
-                                <assign name="Assign7">
-                                    <copy>
-                                        <from>concat($WADLAnalyzeOut.category, $AnalyzeOut.category)</from>
-                                        <to variable="AnalyzeOut" part="category"/>
-                                    </copy>
-                                </assign>
+                                <empty name="Empty3"/>
                             </onMessage>
                                 <onAlarm>
                                     <for>'P0Y0M0DT0H0M5.0S'</for>
@@ -132,6 +117,12 @@
                 </if>
             </sequence>
         </flow>
+        <assign name="Assign5">
+            <copy>
+                <from>concat(concat(concat(concat($WSDLAnalyzeOut.category, ' | '), $RESTAnalyzeOut.category), ' | '), $WADLAnalyzeOut.category)</from>
+                <to variable="AnalyzeOut"/>
+            </copy>
+        </assign>
         <reply name="Reply1" partnerLink="Client" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" portType="tns:WSCatServicesPortType" variable="AnalyzeOut"/>
     </sequence>
 </process>
