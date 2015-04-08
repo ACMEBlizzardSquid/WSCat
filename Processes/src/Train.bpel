@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<process
+    name="Train"
+    targetNamespace="http://enterprise.netbeans.org/bpel/WSCat-Processes/Train"
+    xmlns:tns="http://enterprise.netbeans.org/bpel/WSCat-Processes/Train"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+    xmlns:sxt="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Trace" 
+    xmlns:sxed="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor2"
+    xmlns:sxat="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Attachment"
+    xmlns:sxeh="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/ErrorHandling">
+    <import namespace="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" location="WSCatServices.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" location="RESTServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://service.wscat.soen487/" location="RESTService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <partnerLinks>
+        <partnerLink name="RESTInvoke" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" partnerLinkType="tns:Invoke" partnerRole="RESTInvoke"/>
+        <partnerLink name="WSCat" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" partnerLinkType="tns:WSCatServices" myRole="WSCatServicesPortTypeRole"/>
+        <partnerLink name="RESTReceive" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" partnerLinkType="tns:Receive" myRole="RESTReceive"/>
+    </partnerLinks>
+    <variables>
+        <variable name="RESTTrainOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" messageType="tns:TrainResponse"/>
+        <variable name="RESTTrainIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" messageType="tns:TrainRequest"/>
+        <variable name="Response" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" messageType="tns:TrainResponse"/>
+        <variable name="Request" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" messageType="tns:TrainRequest"/>
+    </variables>
+    <sequence>
+        <receive name="Request" createInstance="yes" partnerLink="WSCat" operation="Train" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" portType="tns:WSCatServicesPortType" variable="Request"/>
+        <assign name="SetResponse">
+            <copy>
+                <from>''</from>
+                <to variable="Response"/>
+            </copy>
+        </assign>
+        <flow name="Invokes">
+            <if name="IfREST">
+                <condition>contains($Request.type, 'REST')</condition>
+                <sequence name="Sequence1">
+                    <assign name="Assign1">
+                        <copy>
+                            <from variable="Request" part="file"/>
+                            <to variable="RESTTrainIn" part="file"/>
+                        </copy>
+                        <copy>
+                            <from variable="Request" part="category"/>
+                            <to variable="RESTTrainIn" part="category"/>
+                        </copy>
+                    </assign>
+                    <invoke name="RESTTrain" partnerLink="RESTInvoke" operation="Train" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" portType="tns:Invoke" inputVariable="RESTTrainIn"/>
+                    <pick name="Pick1">
+                        <onMessage partnerLink="RESTReceive" operation="Train" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" portType="tns:Response" variable="RESTTrainOut">
+                            <assign name="Assign4">
+                                <copy>
+                                    <from>concat($Response.response, '&lt;REST&gt;', $RESTTrainOut.response, '&lt;/REST&gt;')</from>
+                                    <to variable="Response"/>
+                                </copy>
+                            </assign>
+                        </onMessage>
+                    </pick>
+                </sequence>
+                <else>
+                    <assign name="Assign3">
+                        <copy>
+                            <from>concat($Response.response, '&lt;REST&gt;aint no rest for teh wicked&lt;/REST&gt;')</from>
+                            <to variable="Response"/>
+                        </copy>
+                    </assign>
+                </else>
+            </if>
+        </flow>
+        <reply name="Response" partnerLink="WSCat" operation="Train" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" portType="tns:WSCatServicesPortType" variable="Response"/>
+    </sequence>
+</process>

@@ -13,31 +13,41 @@
     <import namespace="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" location="RESTServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
     <import namespace="http://service.wscat.soen487/" location="RESTService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
     <partnerLinks>
-        <partnerLink name="Receive" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" partnerLinkType="tns:Receive" myRole="RESTReceive"/>
-        <partnerLink name="Invoke" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" partnerLinkType="tns:Invoke" partnerRole="RESTInvoke"/>
+        <partnerLink name="Receive" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" partnerLinkType="tns:Receive" partnerRole="RESTReceive"/>
+        <partnerLink name="Invoke" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" partnerLinkType="tns:Invoke" myRole="RESTInvoke"/>
         <partnerLink name="Sync" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" partnerLinkType="tns:Synchronous" partnerRole="WSCatSync"/>
     </partnerLinks>
     <variables>
-        <variable name="Response" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" messageType="tns:TrainRequest"/>
+        <variable name="Response" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" messageType="tns:TrainResponse"/>
+        <variable name="Request" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" messageType="tns:TrainRequest"/>
         <variable name="TrainOnFileOut" xmlns:tns="http://service.wscat.soen487/" messageType="tns:trainOnFileResponse"/>
         <variable name="TrainOnFileIn" xmlns:tns="http://service.wscat.soen487/" messageType="tns:trainOnFile"/>
-        <variable name="Request" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" messageType="tns:TrainResponse"/>
     </variables>
     <sequence>
-        <receive name="Request" createInstance="yes" partnerLink="Receive" operation="Train" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" portType="tns:Response" variable="Request"/>
-        <assign name="Assign1">
+        <receive name="Request" createInstance="yes" partnerLink="Invoke" operation="Train" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" portType="tns:Invoke" variable="Request"/>
+        <assign name="SetID">
             <copy>
-                <from variable="Request"/>
-                <to variable="TrainOnFileIn"/>
+                <from variable="Request" part="id"/>
+                <to variable="Response" part="id"/>
+            </copy>
+        </assign>
+        <assign name="AssignSync">
+            <copy>
+                <from variable="Request" part="category"/>
+                <to>$TrainOnFileIn.parameters/category</to>
+            </copy>
+            <copy>
+                <from variable="Request" part="file"/>
+                <to>$TrainOnFileIn.parameters/file</to>
             </copy>
         </assign>
         <invoke name="Sync" partnerLink="Sync" operation="trainOnFile" xmlns:tns="http://service.wscat.soen487/" portType="tns:WSCat" inputVariable="TrainOnFileIn" outputVariable="TrainOnFileOut"/>
-        <assign name="Assign2">
+        <assign name="AssignResponse">
             <copy>
-                <from variable="TrainOnFileOut"/>
-                <to variable="Response"/>
+                <from>$TrainOnFileOut.parameters/return</from>
+                <to variable="Response" part="response"/>
             </copy>
         </assign>
-        <invoke name="Invoke1" partnerLink="Invoke" operation="Train" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" portType="tns:Invoke" inputVariable="Response"/>
+        <invoke name="Response" partnerLink="Receive" operation="Train" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" portType="tns:Response" inputVariable="Response"/>
     </sequence>
 </process>
