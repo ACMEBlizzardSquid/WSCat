@@ -144,7 +144,7 @@
   </binding>
   <service name="WSCatService">
     <port name="WSCatPort" binding="tns:WSCatPortBinding">
-      <soap:address location="http://localhost:8080/WSCat-REST/WSCatService"/>
+      <soap:address location="http://localhost:8080/WSCat-WADL/WSCatService"/>
     </port>
   </service>
 </definitions>
