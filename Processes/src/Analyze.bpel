@@ -15,12 +15,24 @@
     <import namespace="http://service.wscat.soen487/" location="WSDLService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
     <import namespace="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" location="RESTServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
     <import namespace="http://service.wscat.soen487/" location="RESTService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" location="WADLServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://service.wscat.soen487/" location="WADLService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
     <partnerLinks>
+        <partnerLink name="WADL" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" partnerLinkType="tns:Invoke" partnerRole="WADLInvoke"/>
+        <partnerLink name="REST" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" partnerLinkType="tns:Invoke" partnerRole="RESTInvoke"/>
+        <partnerLink name="WSDL" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" partnerLinkType="tns:Invoke" partnerRole="WSDLInvoke"/>
         <partnerLink name="Client" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" partnerLinkType="tns:WSCatServices" myRole="WSCatServicesPortTypeRole"/>
         <partnerLink name="WSDLCallback" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" partnerLinkType="tns:Receive" myRole="WSDLReceive"/>
         <partnerLink name="RESTCallback" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" partnerLinkType="tns:Receive" myRole="RESTReceive"/>
+        <partnerLink name="WADLCallback" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" partnerLinkType="tns:Receive" myRole="WADLReceive"/>
     </partnerLinks>
     <variables>
+        <variable name="WADLAnalyzeOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" messageType="tns:AnalyzeResponse"/>
+        <variable name="RESTAnalyzeOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" messageType="tns:AnalyzeResponse"/>
+        <variable name="WSDLAnalyzeOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" messageType="tns:AnalyzeResponse"/>
+        <variable name="WSDLAnalyzeIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" messageType="tns:AnalyzeRequest"/>
+        <variable name="WADLAnalyzeIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" messageType="tns:AnalyzeRequest"/>
+        <variable name="RESTAnalyzeIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" messageType="tns:AnalyzeRequest"/>
         <variable name="AnalyzeOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" messageType="tns:AnalyzeResponse"/>
         <variable name="AnalyzeIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" messageType="tns:AnalyzeRequest"/>
     </variables>
@@ -28,33 +40,67 @@
         <receive name="Receive1" createInstance="yes" partnerLink="Client" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" portType="tns:WSCatServicesPortType" variable="AnalyzeIn"/>
         <assign name="Assign1"/>
         <flow name="Flow1">
-            <if name="If1">
-                <condition>contains($AnalyzeIn.type, 'WSDL')</condition>
-                <pick name="Pick1">
-                    <onMessage/>
-                    <onAlarm>
-                        <for>'P0Y0M0DT0H0M5.0S'</for>
-                    </onAlarm>
-                </pick>
-            </if>
-            <if name="If2">
-                <condition>contains('REST', $AnalyzeIn.type)</condition>
-                <pick name="Pick2">
-                    <onMessage/>
-                    <onAlarm>
-                        <for>'P0Y0M0DT0H0M5.0S'</for>
-                    </onAlarm>
-                </pick>
-            </if>
-            <if name="If3">
-                <condition>contains('WADL', $AnalyzeIn.type)</condition>
-                <pick name="Pick3">
-                    <onMessage/>
-                    <onAlarm>
-                        <for>'P0Y0M0DT0H0M5.0S'</for>
-                    </onAlarm>
-                </pick>
-            </if>
+            <sequence name="WSDL">
+                <invoke name="Invoke1" partnerLink="WSDL" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" portType="tns:Invoke" inputVariable="WSDLAnalyzeIn"/>
+                <if name="If1">
+                    <condition>contains($AnalyzeIn.type, 'WSDL')</condition>
+                        <pick name="Pick1">
+                            <onMessage partnerLink="WSDLCallback" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" portType="tns:Response" variable="WSDLAnalyzeOut">
+                                <assign name="Assign5">
+                                    <copy>
+                                        <from>concat($WSDLAnalyzeOut.category, $AnalyzeOut.category)</from>
+                                        <to variable="AnalyzeOut" part="category"/>
+                                    </copy>
+                                </assign>
+                            </onMessage>
+                                <onAlarm>
+                                    <for>'P0Y0M0DT0H0M5.0S'</for>
+                                    <assign name="Assign2">
+                                        <copy>
+                                                <from>''</from>
+                                                    <to variable="WSDLAnalyzeOut" part="category"/>
+                                            </copy>
+                                    </assign>
+                                </onAlarm>
+                        </pick>
+                </if>
+            </sequence>
+            <sequence name="REST">
+                <invoke name="Invoke2" partnerLink="REST" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" portType="tns:Invoke" inputVariable="RESTAnalyzeIn"/>
+                <if name="If2">
+                    <condition>contains('REST', $AnalyzeIn.type)</condition>
+                        <pick name="Pick2">
+                            <onMessage partnerLink="RESTCallback" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" portType="tns:Response" variable="RESTAnalyzeOut"/>
+                                <onAlarm>
+                                    <for>'P0Y0M0DT0H0M5.0S'</for>
+                                    <assign name="Assign3">
+                                        <copy>
+                                            <from>''</from>
+                                            <to variable="RESTAnalyzeOut" part="category"/>
+                                        </copy>
+                                    </assign>
+                                </onAlarm>
+                        </pick>
+                </if>
+            </sequence>
+            <sequence name="WADL">
+                <invoke name="Invoke3" partnerLink="WADL" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" portType="tns:Invoke" inputVariable="WADLAnalyzeIn"/>
+                <if name="If3">
+                    <condition>contains('WADL', $AnalyzeIn.type)</condition>
+                        <pick name="Pick3">
+                            <onMessage partnerLink="WADLCallback" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" portType="tns:Receive" variable="WADLAnalyzeOut"/>
+                                <onAlarm>
+                                    <for>'P0Y0M0DT0H0M5.0S'</for>
+                                    <assign name="Assign4">
+                                        <copy>
+                                            <from>''</from>
+                                            <to variable="WADLAnalyzeOut" part="category"/>
+                                        </copy>
+                                    </assign>
+                                </onAlarm>
+                        </pick>
+                </if>
+            </sequence>
         </flow>
         <reply name="Reply1" partnerLink="Client" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" portType="tns:WSCatServicesPortType" variable="AnalyzeOut"/>
     </sequence>

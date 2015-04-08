@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<definitions
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="WizardCorrelationProperties.wsdl" targetNamespace="http://enterprise.netbeans.org/bpel/WizardCorrelationProperties" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:ns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" xmlns:tns="http://enterprise.netbeans.org/bpel/WizardCorrelationProperties">
+    <import namespace="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" location="WSDLServiceWrapper.wsdl"/>
+    <import namespace="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" location="RESTServiceWrapper.wsdl"/>
+    <import namespace="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" location="WADLServiceWrapper.wsdl"/>
+    <vprop:property name="wzrd_prop_integer_integer" type="xsd:integer"/>
+    <vprop:propertyAlias propertyName="tns:wzrd_prop_integer_integer" messageType="ns:AnalyzeRequest" part="id"/>
+    <vprop:propertyAlias propertyName="tns:wzrd_prop_integer_integer" messageType="ns:AnalyzeResponse" part="id"/>
+</definitions>
