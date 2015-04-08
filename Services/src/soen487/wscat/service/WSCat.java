@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -34,28 +35,27 @@ public class WSCat {
 	@Resource private WebServiceContext context;
 	private boolean initialized = false;
 	private String type = null;
+	
 	/**
 	 * Initialization
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
 	@WebMethod
-	public String generateTrainSet(){
+	public void generateTrainSet(){
 		try{
 			ServletContext servletContext = (ServletContext) context.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
 			type = servletContext.getInitParameter("WSCAT");
 			if(type == null)
 				throw new IOException("Invalid WSCAT.type");
-			//String type = "WSDL";
-			//String marfcatInPath = "/tmp/TrainSet.marfcatin";
-			//MarfcatIn trainFile = ParserFactory.getInstance(type).getTrainSet(marfcatInPath, 10);
-			//trainFile.write();
+			String marfcatInPath = "/tmp/TrainSet.marfcatin";
+			MarfcatIn trainFile = ParserFactory.getInstance(type).getTrainSet(marfcatInPath, 10);
+			trainFile.write();
+			new Marfcat().train(marfcatInPath);
 			initialized=true;
-			return type;
 		}
 		catch(IOException e) { System.err.println(e.getLocalizedMessage());}
-		//catch(InterruptedException e) { System.err.println(e.getLocalizedMessage());}
-		return "";
+		catch(InterruptedException e) { System.err.println(e.getLocalizedMessage());}
 	}
 	
 	@WebMethod(operationName = "isInitialized")
