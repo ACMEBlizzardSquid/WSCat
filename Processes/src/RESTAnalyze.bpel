@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<process
+    name="RESTAnalyze"
+    targetNamespace="http://enterprise.netbeans.org/bpel/WSCat-Processes/RESTAnalyze"
+    xmlns:tns="http://enterprise.netbeans.org/bpel/WSCat-Processes/RESTAnalyze"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+    xmlns:sxt="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Trace" 
+    xmlns:sxed="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor2"
+    xmlns:sxat="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Attachment"
+    xmlns:sxeh="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/ErrorHandling">
+    <import namespace="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" location="RESTServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://service.wscat.soen487/" location="RESTService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <partnerLinks>
+        <partnerLink name="SYNC" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" partnerLinkType="tns:Synchronous" partnerRole="WSCatSync"/>
+        <partnerLink name="Receive" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" partnerLinkType="tns:Receive" partnerRole="RESTReceive"/>
+        <partnerLink name="Invoke" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" partnerLinkType="tns:Invoke" myRole="RESTInvoke"/>
+    </partnerLinks>
+    <variables>
+        <variable name="AnalyzeOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" messageType="tns:AnalyzeResponse"/>
+        <variable name="AnalyzeFileOut" xmlns:tns="http://service.wscat.soen487/" messageType="tns:analyzeFileResponse"/>
+        <variable name="AnalyzeFileIn" xmlns:tns="http://service.wscat.soen487/" messageType="tns:analyzeFile"/>
+        <variable name="AnalyzeIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" messageType="tns:AnalyzeRequest"/>
+    </variables>
+    <sequence>
+        <receive name="Receive1" createInstance="yes" partnerLink="Invoke" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" portType="tns:Invoke" variable="AnalyzeIn"/>
+        <assign name="Assign1">
+            <copy>
+                <from variable="AnalyzeIn" part="id"/>
+                <to variable="AnalyzeOut" part="id"/>
+            </copy>
+            <copy>
+                <from variable="AnalyzeIn" part="file"/>
+                <to>$AnalyzeFileIn.parameters/file</to>
+            </copy>
+        </assign>
+        <invoke name="Invoke2" partnerLink="SYNC" operation="analyzeFile" xmlns:tns="http://service.wscat.soen487/" portType="tns:WSCat" inputVariable="AnalyzeFileIn" outputVariable="AnalyzeFileOut"/>
+        <assign name="Assign2">
+            <copy>
+                <from>$AnalyzeFileOut.parameters/return</from>
+                <to variable="AnalyzeOut" part="category"/>
+            </copy>
+            <copy>
+                <from variable="AnalyzeIn" part="id"/>
+                <to variable="AnalyzeOut" part="id"/>
+            </copy>
+        </assign>
+        <invoke name="Invoke1" partnerLink="Receive" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" portType="tns:Response" inputVariable="AnalyzeOut"/>
+    </sequence>
+</process>

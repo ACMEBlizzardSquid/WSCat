@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<process
+    name="WADLAnalyze"
+    targetNamespace="http://enterprise.netbeans.org/bpel/WSCat-Processes/WADLAnalyze"
+    xmlns:tns="http://enterprise.netbeans.org/bpel/WSCat-Processes/WADLAnalyze"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+    xmlns:sxt="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Trace" 
+    xmlns:sxed="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor2"
+    xmlns:sxat="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Attachment"
+    xmlns:sxeh="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/ErrorHandling">
+    <import namespace="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" location="WADLServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://service.wscat.soen487/" location="WADLService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <partnerLinks>
+        <partnerLink name="SYNC" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" partnerLinkType="tns:Synchronous" partnerRole="role1"/>
+        <partnerLink name="Receive" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" partnerLinkType="tns:Receive" partnerRole="WADLReceive"/>
+        <partnerLink name="Invoke" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" partnerLinkType="tns:Invoke" myRole="WADLInvoke"/>
+    </partnerLinks>
+    <variables>
+        <variable name="AnalyzeFileOut" xmlns:tns="http://service.wscat.soen487/" messageType="tns:analyzeFileResponse"/>
+        <variable name="AnalyzeFileIn" xmlns:tns="http://service.wscat.soen487/" messageType="tns:analyzeFile"/>
+        <variable name="AnalyzeOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" messageType="tns:AnalyzeResponse"/>
+        <variable name="AnalyzeIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" messageType="tns:AnalyzeRequest"/>
+    </variables>
+    <sequence>
+        <receive name="Receive1" createInstance="yes" partnerLink="Invoke" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" portType="tns:Invoke" variable="AnalyzeIn"/>
+        <assign name="Assign1">
+            <copy>
+                <from variable="AnalyzeIn" part="file"/>
+                <to>$AnalyzeFileIn.parameters/file</to>
+            </copy>
+            <copy>
+                <from variable="AnalyzeIn" part="id"/>
+                <to variable="AnalyzeOut" part="id"/>
+            </copy>
+        </assign>
+        <invoke name="Invoke2" partnerLink="SYNC" operation="analyzeFile" xmlns:tns="http://service.wscat.soen487/" portType="tns:WSCat" inputVariable="AnalyzeFileIn" outputVariable="AnalyzeFileOut"/>
+        <assign name="Assign2">
+            <copy>
+                <from>$AnalyzeFileOut.parameters/return</from>
+                <to variable="AnalyzeOut" part="category"/>
+            </copy>
+            <copy>
+                <from variable="AnalyzeIn" part="id"/>
+                <to variable="AnalyzeOut" part="id"/>
+            </copy>
+        </assign>
+        <invoke name="Invoke1" partnerLink="Receive" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" portType="tns:Receive" inputVariable="AnalyzeOut"/>
+    </sequence>
+</process>
