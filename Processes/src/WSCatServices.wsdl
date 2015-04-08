@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="WSCatServices" targetNamespace="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype">
+    <types/>
+    <message name="InitializeRequest"/>
+    <message name="InitializeResponse"/>
+    <portType name="WSCatServicesPortType">
+        <operation name="Initialize">
+            <input name="input1" message="tns:InitializeRequest"/>
+            <output name="output1" message="tns:InitializeResponse"/>
+        </operation>
+    </portType>
+    <plnk:partnerLinkType name="WSCatServices">
+        <plnk:role name="WSCatServicesPortTypeRole" portType="tns:WSCatServicesPortType"/>
+    </plnk:partnerLinkType>
+</definitions>

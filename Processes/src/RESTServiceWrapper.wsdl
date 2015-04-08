@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="RESTServiceWrapper2" targetNamespace="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" xmlns:ns0="http://service.wscat.soen487/" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:ns1="http://service.wscat.soen487/">
+    <import location="RESTService.wsdl" namespace="http://service.wscat.soen487/"/>
+    <types>
+        <xsd:schema targetNamespace="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2">
+            <xsd:import namespace="http://service.wscat.soen487/" schemaLocation="RESTServiceSchema.xsd"/>
+        </xsd:schema>
+    </types>
+    <message name="InitializeRequest"/>
+    <message name="InitializeResponse">
+        <part name="response" element="ns0:generateTrainSet"/>
+    </message>
+    <portType name="Invoke">
+        <operation name="Initialize">
+            <input name="input1" message="tns:InitializeRequest"/>
+        </operation>
+    </portType>
+    <portType name="Response">
+        <operation name="Initialize">
+            <input name="input1" message="tns:InitializeResponse"/>
+        </operation>
+    </portType>
+    <plnk:partnerLinkType name="Invoke">
+        <plnk:role name="RESTInvoke" portType="tns:Invoke"/>
+    </plnk:partnerLinkType>
+    <plnk:partnerLinkType name="Response">
+        <plnk:role name="RESTCallback" portType="tns:Response"/>
+    </plnk:partnerLinkType>
+    <plnk:partnerLinkType name="Synchronous">
+        <plnk:role name="WSCatSync" portType="ns0:WSCat"/>
+    </plnk:partnerLinkType>
+</definitions>
