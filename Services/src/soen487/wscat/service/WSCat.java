@@ -42,12 +42,12 @@ public class WSCat {
 	 * @throws InterruptedException 
 	 */
 	@WebMethod
-	public void generateTrainSet(){
+	public boolean generateTrainSet(){
 		try{
 			ServletContext servletContext = (ServletContext) context.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
 			type = servletContext.getInitParameter("WSCAT");
 			if(type == null)
-				throw new IOException("Invalid WSCAT.type");
+				throw new IOException("Invalid WSCAT");
 			String marfcatInPath = "/tmp/TrainSet.marfcatin";
 			MarfcatIn trainFile = ParserFactory.getInstance(type).getTrainSet(marfcatInPath, 10);
 			trainFile.write();
@@ -56,6 +56,7 @@ public class WSCat {
 		}
 		catch(IOException e) { System.err.println(e.getLocalizedMessage());}
 		catch(InterruptedException e) { System.err.println(e.getLocalizedMessage());}
+		return initialized;
 	}
 	
 	@WebMethod(operationName = "isInitialized")

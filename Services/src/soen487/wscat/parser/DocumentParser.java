@@ -42,7 +42,7 @@ public abstract class DocumentParser extends CrawlerHandler{
                 throws IOException, InterruptedException {
 		new Crawler()
 		.setHandler(this)
-		.setChunkSize(2)
+		//.setChunkSize(2)
 		.setSearchLength(length)
 		.run(this.getRoot());
 		
