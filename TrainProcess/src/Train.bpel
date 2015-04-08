@@ -130,7 +130,7 @@
         </flow>
         <assign name="Assign2">
             <copy>
-                <from>concat($TrainOutWSDL.response, concat($TrainOutREST.response, concat($TrainOutWADL.response, stub())))</from>
+                <from>concat($TrainOutWSDL.response, concat($TrainOutREST.response, concat($TrainOutWADL.response, ' ')))</from>
                 <to variable="Response" part="response"/>
             </copy>
         </assign>

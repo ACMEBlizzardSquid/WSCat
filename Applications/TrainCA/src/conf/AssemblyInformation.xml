@@ -2,22 +2,22 @@
 <jbi xmlns="http://java.sun.com/xml/ns/jbi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xsi:schemaLocation="http://java.sun.com/xml/ns/jbi ./jbi.xsd">
     <service-assembly>
         <identification>
-            <name>WSCat-Applications</name>
-            <description>Represents the Service Assembly of WSCat-Applications</description>
+            <name>TrainCA</name>
+            <description>Represents the Service Assembly of TrainCA</description>
         </identification>
         <service-unit>
             <identification>
-                <name>WSCat-Applications-WSCat-Processes</name>
+                <name>TrainCA-WSCat-Train</name>
                 <description>Represents this Service Unit</description>
             </identification>
             <target>
-                <artifacts-zip>WSCat-Processes.jar</artifacts-zip>
+                <artifacts-zip>WSCat-Train.jar</artifacts-zip>
                 <component-name>sun-bpel-engine</component-name>
             </target>
         </service-unit>
         <service-unit>
             <identification>
-                <name>WSCat-Applications-sun-database-binding</name>
+                <name>TrainCA-sun-database-binding</name>
                 <description>Represents this Service Unit</description>
             </identification>
             <target>
@@ -27,7 +27,7 @@
         </service-unit>
         <service-unit>
             <identification>
-                <name>WSCat-Applications-sun-email-binding</name>
+                <name>TrainCA-sun-email-binding</name>
                 <description>Represents this Service Unit</description>
             </identification>
             <target>
@@ -37,7 +37,7 @@
         </service-unit>
         <service-unit>
             <identification>
-                <name>WSCat-Applications-sun-file-binding</name>
+                <name>TrainCA-sun-file-binding</name>
                 <description>Represents this Service Unit</description>
             </identification>
             <target>
@@ -47,7 +47,7 @@
         </service-unit>
         <service-unit>
             <identification>
-                <name>WSCat-Applications-sun-ftp-binding</name>
+                <name>TrainCA-sun-ftp-binding</name>
                 <description>Represents this Service Unit</description>
             </identification>
             <target>
@@ -57,7 +57,7 @@
         </service-unit>
         <service-unit>
             <identification>
-                <name>WSCat-Applications-sun-hl7-binding</name>
+                <name>TrainCA-sun-hl7-binding</name>
                 <description>Represents this Service Unit</description>
             </identification>
             <target>
@@ -67,7 +67,7 @@
         </service-unit>
         <service-unit>
             <identification>
-                <name>WSCat-Applications-sun-http-binding</name>
+                <name>TrainCA-sun-http-binding</name>
                 <description>Represents this Service Unit</description>
             </identification>
             <target>
@@ -77,7 +77,7 @@
         </service-unit>
         <service-unit>
             <identification>
-                <name>WSCat-Applications-sun-jms-binding</name>
+                <name>TrainCA-sun-jms-binding</name>
                 <description>Represents this Service Unit</description>
             </identification>
             <target>
@@ -87,7 +87,7 @@
         </service-unit>
         <service-unit>
             <identification>
-                <name>WSCat-Applications-sun-ldap-binding</name>
+                <name>TrainCA-sun-ldap-binding</name>
                 <description>Represents this Service Unit</description>
             </identification>
             <target>
@@ -97,7 +97,7 @@
         </service-unit>
         <service-unit>
             <identification>
-                <name>WSCat-Applications-sun-rest-binding</name>
+                <name>TrainCA-sun-rest-binding</name>
                 <description>Represents this Service Unit</description>
             </identification>
             <target>
@@ -107,7 +107,7 @@
         </service-unit>
         <service-unit>
             <identification>
-                <name>WSCat-Applications-sun-scheduler-binding</name>
+                <name>TrainCA-sun-scheduler-binding</name>
                 <description>Represents this Service Unit</description>
             </identification>
             <target>
@@ -117,7 +117,7 @@
         </service-unit>
         <service-unit>
             <identification>
-                <name>WSCat-Applications-sun-webspheremq-binding</name>
+                <name>TrainCA-sun-webspheremq-binding</name>
                 <description>Represents this Service Unit</description>
             </identification>
             <target>
