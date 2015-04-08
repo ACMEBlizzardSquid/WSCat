@@ -9,7 +9,7 @@
     xmlns:sxt="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Trace" 
     xmlns:sxed="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor2"
     xmlns:sxat="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Attachment"
-    xmlns:sxeh="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/ErrorHandling">
+    xmlns:sxeh="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/ErrorHandling" xmlns:ns0="http://enterprise.netbeans.org/bpel/WizardCorrelationProperties">
     <import namespace="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" location="WSCatServices.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
     <import namespace="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" location="WSDLServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
     <import namespace="http://service.wscat.soen487/" location="WSDLService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
@@ -17,6 +17,7 @@
     <import namespace="http://service.wscat.soen487/" location="RESTService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
     <import namespace="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" location="WADLServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
     <import namespace="http://service.wscat.soen487/" location="WADLService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://enterprise.netbeans.org/bpel/WizardCorrelationProperties" location="WizardCorrelationProperties.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
     <partnerLinks>
         <partnerLink name="WADL" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" partnerLinkType="tns:Invoke" partnerRole="WADLInvoke"/>
         <partnerLink name="REST" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" partnerLinkType="tns:Invoke" partnerRole="RESTInvoke"/>
@@ -36,16 +37,41 @@
         <variable name="AnalyzeOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" messageType="tns:AnalyzeResponse"/>
         <variable name="AnalyzeIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" messageType="tns:AnalyzeRequest"/>
     </variables>
+    <correlationSets>
+        <correlationSet name="wzrd_set_Invoke1_OnMessage_Pick1_Analyze" properties="ns0:wzrd_prop_integer_integer"/>
+        <correlationSet name="wzrd_set_Invoke2_OnMessage_Pick2_Analyze" properties="ns0:wzrd_prop_integer_integer"/>
+        <correlationSet name="wzrd_set_Invoke3_OnMessage_Pick3_Analyze" properties="ns0:wzrd_prop_integer_integer"/>
+    </correlationSets>
     <sequence>
         <receive name="Receive1" createInstance="yes" partnerLink="Client" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" portType="tns:WSCatServicesPortType" variable="AnalyzeIn"/>
-        <assign name="Assign1"/>
+        <assign name="Assign1">
+            <copy>
+                <from variable="AnalyzeIn" part="file"/>
+                <to variable="WSDLAnalyzeIn" part="file"/>
+            </copy>
+            <copy>
+                <from variable="AnalyzeIn" part="file"/>
+                <to variable="WADLAnalyzeIn" part="file"/>
+            </copy>
+            <copy>
+                <from variable="AnalyzeIn" part="file"/>
+                <to variable="RESTAnalyzeIn" part="file"/>
+            </copy>
+        </assign>
         <flow name="Flow1">
             <sequence name="WSDL">
-                <invoke name="Invoke1" partnerLink="WSDL" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" portType="tns:Invoke" inputVariable="WSDLAnalyzeIn"/>
+                <invoke name="Invoke1" partnerLink="WSDL" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" portType="tns:Invoke" inputVariable="WSDLAnalyzeIn">
+                    <correlations>
+                        <correlation set="wzrd_set_Invoke1_OnMessage_Pick1_Analyze" initiate="yes"/>
+                    </correlations>
+                </invoke>
                 <if name="If1">
                     <condition>contains($AnalyzeIn.type, 'WSDL')</condition>
                         <pick name="Pick1">
                             <onMessage partnerLink="WSDLCallback" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" portType="tns:Response" variable="WSDLAnalyzeOut">
+                                <correlations>
+                                    <correlation set="wzrd_set_Invoke1_OnMessage_Pick1_Analyze" initiate="no"/>
+                                </correlations>
                                 <assign name="Assign5">
                                     <copy>
                                         <from>concat($WSDLAnalyzeOut.category, $AnalyzeOut.category)</from>
@@ -66,11 +92,25 @@
                 </if>
             </sequence>
             <sequence name="REST">
-                <invoke name="Invoke2" partnerLink="REST" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" portType="tns:Invoke" inputVariable="RESTAnalyzeIn"/>
+                <invoke name="Invoke2" partnerLink="REST" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" portType="tns:Invoke" inputVariable="RESTAnalyzeIn">
+                    <correlations>
+                        <correlation set="wzrd_set_Invoke2_OnMessage_Pick2_Analyze" initiate="yes"/>
+                    </correlations>
+                </invoke>
                 <if name="If2">
                     <condition>contains('REST', $AnalyzeIn.type)</condition>
                         <pick name="Pick2">
-                            <onMessage partnerLink="RESTCallback" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" portType="tns:Response" variable="RESTAnalyzeOut"/>
+                            <onMessage partnerLink="RESTCallback" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" portType="tns:Response" variable="RESTAnalyzeOut">
+                                <correlations>
+                                    <correlation set="wzrd_set_Invoke2_OnMessage_Pick2_Analyze" initiate="no"/>
+                                </correlations>
+                                <assign name="Assign6">
+                                    <copy>
+                                        <from>concat($RESTAnalyzeOut.category, $AnalyzeOut.category)</from>
+                                        <to variable="AnalyzeOut"/>
+                                    </copy>
+                                </assign>
+                            </onMessage>
                                 <onAlarm>
                                     <for>'P0Y0M0DT0H0M5.0S'</for>
                                     <assign name="Assign3">
@@ -84,11 +124,25 @@
                 </if>
             </sequence>
             <sequence name="WADL">
-                <invoke name="Invoke3" partnerLink="WADL" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" portType="tns:Invoke" inputVariable="WADLAnalyzeIn"/>
+                <invoke name="Invoke3" partnerLink="WADL" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" portType="tns:Invoke" inputVariable="WADLAnalyzeIn">
+                    <correlations>
+                        <correlation set="wzrd_set_Invoke3_OnMessage_Pick3_Analyze" initiate="yes"/>
+                    </correlations>
+                </invoke>
                 <if name="If3">
                     <condition>contains('WADL', $AnalyzeIn.type)</condition>
                         <pick name="Pick3">
-                            <onMessage partnerLink="WADLCallback" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" portType="tns:Receive" variable="WADLAnalyzeOut"/>
+                            <onMessage partnerLink="WADLCallback" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" portType="tns:Receive" variable="WADLAnalyzeOut">
+                                <correlations>
+                                    <correlation set="wzrd_set_Invoke3_OnMessage_Pick3_Analyze" initiate="no"/>
+                                </correlations>
+                                <assign name="Assign7">
+                                    <copy>
+                                        <from>concat($WADLAnalyzeOut.category, $AnalyzeOut.category)</from>
+                                        <to variable="AnalyzeOut" part="category"/>
+                                    </copy>
+                                </assign>
+                            </onMessage>
                                 <onAlarm>
                                     <for>'P0Y0M0DT0H0M5.0S'</for>
                                     <assign name="Assign4">

@@ -8,10 +8,10 @@
     <message name="InitializeResponse"/>
     <message name="AnalyzeRequest">
         <part name="file" type="xsd:string"/>
-        <part name="type" type="xsd:integer"/>
+        <part name="type" type="xsd:string"/>
     </message>
     <message name="AnalyzeResponse">
-        <part name="category"/>
+        <part name="category" type="xsd:string"/>
     </message>
     <portType name="WSCatServicesPortType">
         <operation name="Initialize">
