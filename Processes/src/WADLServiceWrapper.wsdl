@@ -11,14 +11,28 @@
     <message name="InitializeResponse">
         <part name="part1" type="xsd:string"/>
     </message>
+    <message name="AnalyzeRequest">
+        <part name="file" type="xsd:string"/>
+        <part name="id" type="xsd:integer"/>
+    </message>
+    <message name="AnalyzeResponse">
+        <part name="category" type="xsd:string"/>
+        <part name="id" type="xsd:integer"/>
+    </message>
     <portType name="Invoke">
         <operation name="Initialize">
             <input name="input1" message="tns:InitializeRequest"/>
+        </operation>
+        <operation name="Analyze">
+            <input name="input2" message="tns:AnalyzeRequest"/>
         </operation>
     </portType>
     <portType name="Receive">
         <operation name="Initialize">
             <input name="input1" message="tns:InitializeResponse"/>
+        </operation>
+        <operation name="Analyze">
+            <input name="input2" message="tns:AnalyzeResponse"/>
         </operation>
     </portType>
     <plnk:partnerLinkType name="Invoke">
