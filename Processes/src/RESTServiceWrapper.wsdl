@@ -26,8 +26,8 @@
     <plnk:partnerLinkType name="Invoke">
         <plnk:role name="RESTInvoke" portType="tns:Invoke"/>
     </plnk:partnerLinkType>
-    <plnk:partnerLinkType name="Response">
-        <plnk:role name="RESTCallback" portType="tns:Response"/>
+    <plnk:partnerLinkType name="Receive">
+        <plnk:role name="RESTReceive" portType="tns:Response"/>
     </plnk:partnerLinkType>
     <plnk:partnerLinkType name="Synchronous">
         <plnk:role name="WSCatSync" portType="ns0:WSCat"/>
