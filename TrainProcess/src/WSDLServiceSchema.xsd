@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" targetNamespace="http://service.wscat.soen487/" xmlns:tns="http://service.wscat.soen487/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="IOException" nillable="true" type="tns:ioExceptionBean"/>
+
+  <xs:element name="InterruptedException" nillable="true" type="tns:interruptedExceptionBean"/>
+
+  <xs:element name="ParserConfigurationException" nillable="true" type="tns:parserConfigurationExceptionBean"/>
+
+  <xs:element name="SAXException" nillable="true" type="tns:saxExceptionBean"/>
+
+  <xs:element name="analyzeFile" nillable="true" type="tns:analyzeFile"/>
+
+  <xs:element name="analyzeFileResponse" nillable="true" type="tns:analyzeFileResponse"/>
+
+  <xs:element name="generateTrainSet" nillable="true" type="tns:generateTrainSet"/>
+
+  <xs:element name="generateTrainSetResponse" nillable="true" type="tns:generateTrainSetResponse"/>
+
+  <xs:element name="getType" nillable="true" type="tns:getType"/>
+
+  <xs:element name="getTypeResponse" nillable="true" type="tns:getTypeResponse"/>
+
+  <xs:element name="isInitialized" nillable="true" type="tns:isInitialized"/>
+
+  <xs:element name="isInitializedResponse" nillable="true" type="tns:isInitializedResponse"/>
+
+  <xs:element name="trainOnFile" nillable="true" type="tns:trainOnFile"/>
+
+  <xs:element name="trainOnFileResponse" nillable="true" type="tns:trainOnFileResponse"/>
+
+  <xs:complexType name="isInitialized">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="isInitializedResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="analyzeFile">
+    <xs:sequence>
+      <xs:element name="file" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="analyzeFileResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ioExceptionBean">
+    <xs:sequence>
+      <xs:element name="message" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="interruptedExceptionBean">
+    <xs:sequence>
+      <xs:element name="message" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="generateTrainSet">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="generateTrainSetResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="trainOnFile">
+    <xs:sequence>
+      <xs:element name="category" type="xs:string" minOccurs="0"/>
+      <xs:element name="file" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="trainOnFileResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="parserConfigurationExceptionBean">
+    <xs:sequence>
+      <xs:element name="message" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="saxExceptionBean">
+    <xs:sequence>
+      <xs:element name="exception" type="tns:exception" minOccurs="0"/>
+      <xs:element name="message" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="exception">
+    <xs:complexContent>
+      <xs:extension base="tns:throwable">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="throwable">
+    <xs:sequence>
+      <xs:element name="stackTrace" type="tns:stackTraceElement" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="stackTraceElement" final="extension restriction">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="getType">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="getTypeResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+

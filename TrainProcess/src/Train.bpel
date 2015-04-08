@@ -15,7 +15,7 @@
     <import namespace="http://service.wscat.soen487/" location="RESTService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
     <partnerLinks>
         <partnerLink name="RESTInvoke" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" partnerLinkType="tns:Invoke" partnerRole="RESTInvoke"/>
-        <partnerLink name="WSCat" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" partnerLinkType="tns:WSCatServices" myRole="WSCatServicesPortTypeRole"/>
+        <partnerLink name="Client" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" partnerLinkType="tns:WSCatServices" myRole="WSCatServicesPortTypeRole"/>
         <partnerLink name="RESTReceive" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" partnerLinkType="tns:Receive" myRole="RESTReceive"/>
     </partnerLinks>
     <variables>
@@ -25,7 +25,7 @@
         <variable name="Request" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" messageType="tns:TrainRequest"/>
     </variables>
     <sequence>
-        <receive name="Request" createInstance="yes" partnerLink="WSCat" operation="Train" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" portType="tns:WSCatServicesPortType" variable="Request"/>
+        <receive name="Request" createInstance="yes" partnerLink="Client" operation="Train" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" portType="tns:WSCatServicesPortType" variable="Request"/>
         <assign name="SetResponse">
             <copy>
                 <from>''</from>
@@ -68,6 +68,6 @@
                 </else>
             </if>
         </flow>
-        <reply name="Response" partnerLink="WSCat" operation="Train" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" portType="tns:WSCatServicesPortType" variable="Response"/>
+        <reply name="Response" partnerLink="Client" operation="Train" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" portType="tns:WSCatServicesPortType" variable="Response"/>
     </sequence>
 </process>
