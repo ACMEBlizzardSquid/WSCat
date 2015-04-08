@@ -19,12 +19,24 @@
         <part name="category" type="xsd:string"/>
         <part name="id" type="xsd:integer"/>
     </message>
+    <message name="TrainRequest">
+        <part name="category" type="xsd:string"/>
+        <part name="file" type="xsd:string"/>
+        <part name="id" type="xsd:int"/>
+    </message>
+    <message name="TrainResponse">
+        <part name="response" type="xsd:string"/>
+        <part name="id" type="xsd:int"/>
+    </message>
     <portType name="Invoke">
         <operation name="Initialize">
             <input name="input1" message="tns:InitializeRequest"/>
         </operation>
         <operation name="Analyze">
             <input name="input2" message="tns:AnalyzeRequest"/>
+        </operation>
+        <operation name="Train">
+            <input name="input3" message="tns:TrainRequest"/>
         </operation>
     </portType>
     <portType name="Receive">
@@ -33,6 +45,9 @@
         </operation>
         <operation name="Analyze">
             <input name="input2" message="tns:AnalyzeResponse"/>
+        </operation>
+        <operation name="Train">
+            <input name="input3" message="tns:TrainResponse"/>
         </operation>
     </portType>
     <plnk:partnerLinkType name="Invoke">
