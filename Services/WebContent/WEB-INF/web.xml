@@ -6,7 +6,7 @@
   </welcome-file-list>
   <context-param>  
     <description>Define WSCAT type</description>  
-    <param-name>WSCAT.type</param-name>  
+    <param-name>WSCAT</param-name>  
     <param-value>REST</param-value>  
   </context-param> 
   <servlet>

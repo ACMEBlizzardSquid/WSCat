@@ -26,6 +26,7 @@ import soen487.wscat.marfcat.MarfcatInItem;
 import soen487.wscat.marfcat.utils.FileDownloader;
 import soen487.wscat.parser.DocumentParser;
 import soen487.wscat.parser.ParserFactory;
+import soen487.wscat.parser.WSDLParser;
 
 @WebService
 public class WSCat {
@@ -38,22 +39,23 @@ public class WSCat {
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	@WebMethod(exclude=true)
-	@PostConstruct
-	public void initialize(){
-//		try{
-//			ServletContext servletContext = (ServletContext) context.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
-//			type = servletContext.getInitParameter("WSCAT.type");
-//			type = "WSDL";
-//			if(type == null)
-//				throw new IOException("Invalid WSCAT.type");
-//			String marfcatInPath = "TrainSet.marfcatin";
-//			MarfcatIn trainFile = ParserFactory.getInstance(type).getTrainSet(marfcatInPath, 10);
-//			trainFile.write();
+	@WebMethod
+	public String generateTrainSet(){
+		try{
+			ServletContext servletContext = (ServletContext) context.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
+			type = servletContext.getInitParameter("WSCAT");
+			if(type == null)
+				throw new IOException("Invalid WSCAT.type");
+			//String type = "WSDL";
+			//String marfcatInPath = "/tmp/TrainSet.marfcatin";
+			//MarfcatIn trainFile = ParserFactory.getInstance(type).getTrainSet(marfcatInPath, 10);
+			//trainFile.write();
 			initialized=true;
-//		}
-//		catch(IOException e) { System.err.println(e.getLocalizedMessage());}
-//		catch(InterruptedException e) { System.err.println(e.getLocalizedMessage());}
+			return type;
+		}
+		catch(IOException e) { System.err.println(e.getLocalizedMessage());}
+		//catch(InterruptedException e) { System.err.println(e.getLocalizedMessage());}
+		return "";
 	}
 	
 	@WebMethod(operationName = "isInitialized")
