@@ -20,8 +20,8 @@
     <variables>
         <variable name="AnalyzeFileOut" xmlns:tns="http://service.wscat.soen487/" messageType="tns:analyzeFileResponse"/>
         <variable name="AnalyzeFileIn" xmlns:tns="http://service.wscat.soen487/" messageType="tns:analyzeFile"/>
-        <variable name="AnalyzeOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" messageType="tns:AnalyzeResponse"/>
-        <variable name="AnalyzeIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" messageType="tns:AnalyzeRequest"/>
+        <variable name="AnalyzeOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" messageType="tns:AnalyzeResponseWADL"/>
+        <variable name="AnalyzeIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" messageType="tns:AnalyzeRequestWADL"/>
     </variables>
     <sequence>
         <receive name="Receive1" createInstance="yes" partnerLink="Invoke" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" portType="tns:Invoke" variable="AnalyzeIn"/>

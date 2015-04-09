@@ -18,10 +18,10 @@
         <partnerLink name="Invoke" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" partnerLinkType="tns:Invoke" myRole="RESTInvoke"/>
     </partnerLinks>
     <variables>
-        <variable name="AnalyzeOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" messageType="tns:AnalyzeResponse"/>
+        <variable name="AnalyzeOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" messageType="tns:AnalyzeResponseREST"/>
         <variable name="AnalyzeFileOut" xmlns:tns="http://service.wscat.soen487/" messageType="tns:analyzeFileResponse"/>
         <variable name="AnalyzeFileIn" xmlns:tns="http://service.wscat.soen487/" messageType="tns:analyzeFile"/>
-        <variable name="AnalyzeIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" messageType="tns:AnalyzeRequest"/>
+        <variable name="AnalyzeIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" messageType="tns:AnalyzeRequestREST"/>
     </variables>
     <sequence>
         <receive name="Receive1" createInstance="yes" partnerLink="Invoke" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" portType="tns:Invoke" variable="AnalyzeIn"/>

@@ -11,20 +11,20 @@
     <message name="InitializeResponse">
         <part name="part1" type="xsd:string"/>
     </message>
-    <message name="AnalyzeRequest">
+    <message name="AnalyzeRequestWSDL">
         <part name="file" type="xsd:string"/>
-        <part name="id" type="xsd:integer"/>
+        <part name="id" type="xsd:int"/>
     </message>
-    <message name="AnalyzeResponse">
+    <message name="AnalyzeResponseWSDL">
         <part name="category" type="xsd:string"/>
-        <part name="id" type="xsd:integer"/>
+        <part name="id" type="xsd:int"/>
     </message>
-    <message name="TrainRequest">
+    <message name="TrainRequestWSDL">
         <part name="category" type="xsd:string"/>
         <part name="file" type="xsd:string"/>
         <part name="id" type="xsd:int"/>
     </message>
-    <message name="TrainResponse">
+    <message name="TrainResponseWSDL">
         <part name="response" type="xsd:string"/>
         <part name="id" type="xsd:int"/>
     </message>
@@ -33,10 +33,10 @@
             <input name="input1" message="tns:InitializeRequest"/>
         </operation>
         <operation name="Analyze">
-            <input name="input2" message="tns:AnalyzeRequest"/>
+            <input name="input2" message="tns:AnalyzeRequestWSDL"/>
         </operation>
         <operation name="Train">
-            <input name="input3" message="tns:TrainRequest"/>
+            <input name="input3" message="tns:TrainRequestWSDL"/>
         </operation>
     </portType>
     <portType name="Response">
@@ -44,10 +44,10 @@
             <input name="input1" message="tns:InitializeResponse"/>
         </operation>
         <operation name="Analyze">
-            <input name="input2" message="tns:AnalyzeResponse"/>
+            <input name="input2" message="tns:AnalyzeResponseWSDL"/>
         </operation>
         <operation name="Train">
-            <input name="input3" message="tns:TrainResponse"/>
+            <input name="input3" message="tns:TrainResponseWSDL"/>
         </operation>
     </portType>
     <plnk:partnerLinkType name="Synchronous">

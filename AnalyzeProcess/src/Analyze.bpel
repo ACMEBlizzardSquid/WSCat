@@ -17,6 +17,7 @@
     <import namespace="http://service.wscat.soen487/" location="RESTService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
     <import namespace="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" location="WADLServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
     <import namespace="http://service.wscat.soen487/" location="WADLService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://enterprise.netbeans.org/bpel/WizardCorrelationProperties" location="WizardCorrelationProperties.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
     <partnerLinks>
         <partnerLink name="WADL" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" partnerLinkType="tns:Invoke" partnerRole="WADLInvoke"/>
         <partnerLink name="REST" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" partnerLinkType="tns:Invoke" partnerRole="RESTInvoke"/>
@@ -27,15 +28,20 @@
         <partnerLink name="WADLCallback" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" partnerLinkType="tns:Receive" myRole="WADLReceive"/>
     </partnerLinks>
     <variables>
-        <variable name="WADLAnalyzeOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" messageType="tns:AnalyzeResponse"/>
-        <variable name="RESTAnalyzeOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" messageType="tns:AnalyzeResponse"/>
-        <variable name="WSDLAnalyzeOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" messageType="tns:AnalyzeResponse"/>
-        <variable name="WSDLAnalyzeIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" messageType="tns:AnalyzeRequest"/>
-        <variable name="WADLAnalyzeIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" messageType="tns:AnalyzeRequest"/>
-        <variable name="RESTAnalyzeIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" messageType="tns:AnalyzeRequest"/>
+        <variable name="WADLAnalyzeOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" messageType="tns:AnalyzeResponseWADL"/>
+        <variable name="RESTAnalyzeOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" messageType="tns:AnalyzeResponseREST"/>
+        <variable name="WSDLAnalyzeOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" messageType="tns:AnalyzeResponseWSDL"/>
+        <variable name="WSDLAnalyzeIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" messageType="tns:AnalyzeRequestWSDL"/>
+        <variable name="WADLAnalyzeIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" messageType="tns:AnalyzeRequestWADL"/>
+        <variable name="RESTAnalyzeIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" messageType="tns:AnalyzeRequestREST"/>
         <variable name="AnalyzeOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" messageType="tns:AnalyzeResponse"/>
         <variable name="AnalyzeIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" messageType="tns:AnalyzeRequest"/>
     </variables>
+    <correlationSets>
+        <correlationSet name="wzrd_set_Invoke1_OnMessage_Pick1_Analyze" properties="ns0:wzrd_prop_int_int"/>
+        <correlationSet name="wzrd_set_Invoke2_OnMessage_Pick2_Analyze" properties="ns0:wzrd_prop_int_int"/>
+        <correlationSet name="wzrd_set_Invoke3_OnMessage_Pick3_Analyze" properties="ns0:wzrd_prop_int_int"/>
+    </correlationSets>
     <sequence>
         <receive name="Receive1" createInstance="yes" partnerLink="Client" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" portType="tns:WSCatServicesPortType" variable="AnalyzeIn"/>
         <assign name="Assign1">
@@ -51,15 +57,33 @@
                 <from variable="AnalyzeIn" part="file"/>
                 <to variable="RESTAnalyzeIn" part="file"/>
             </copy>
+            <copy>
+                <from variable="AnalyzeIn" part="id"/>
+                <to variable="WSDLAnalyzeIn" part="id"/>
+            </copy>
+            <copy>
+                <from variable="AnalyzeIn" part="id"/>
+                <to variable="WADLAnalyzeIn" part="id"/>
+            </copy>
+            <copy>
+                <from variable="AnalyzeIn" part="id"/>
+                <to variable="RESTAnalyzeIn" part="id"/>
+            </copy>
         </assign>
         <flow name="Flow1">
             <sequence name="WSDL">
                 <invoke name="Invoke1" partnerLink="WSDL" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" portType="tns:Invoke" inputVariable="WSDLAnalyzeIn">
+                    <correlations>
+                        <correlation set="wzrd_set_Invoke1_OnMessage_Pick1_Analyze" initiate="yes"/>
+                    </correlations>
                 </invoke>
                 <if name="If1">
                     <condition>contains($AnalyzeIn.type, 'WSDL')</condition>
                         <pick name="Pick1">
                             <onMessage partnerLink="WSDLCallback" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" portType="tns:Response" variable="WSDLAnalyzeOut">
+                                <correlations>
+                                    <correlation set="wzrd_set_Invoke1_OnMessage_Pick1_Analyze" initiate="no"/>
+                                </correlations>
                                 <empty name="Empty1"/>
                             </onMessage>
                                 <onAlarm>
@@ -76,11 +100,17 @@
             </sequence>
             <sequence name="REST">
                 <invoke name="Invoke2" partnerLink="REST" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" portType="tns:Invoke" inputVariable="RESTAnalyzeIn">
+                    <correlations>
+                        <correlation set="wzrd_set_Invoke2_OnMessage_Pick2_Analyze" initiate="yes"/>
+                    </correlations>
                 </invoke>
                 <if name="If2">
                     <condition>contains('REST', $AnalyzeIn.type)</condition>
                         <pick name="Pick2">
                             <onMessage partnerLink="RESTCallback" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" portType="tns:Response" variable="RESTAnalyzeOut">
+                                <correlations>
+                                    <correlation set="wzrd_set_Invoke2_OnMessage_Pick2_Analyze" initiate="no"/>
+                                </correlations>
                                 <empty name="Empty2"/>
                             </onMessage>
                                 <onAlarm>
@@ -97,11 +127,17 @@
             </sequence>
             <sequence name="WADL">
                 <invoke name="Invoke3" partnerLink="WADL" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" portType="tns:Invoke" inputVariable="WADLAnalyzeIn">
+                    <correlations>
+                        <correlation set="wzrd_set_Invoke3_OnMessage_Pick3_Analyze" initiate="yes"/>
+                    </correlations>
                 </invoke>
                 <if name="If3">
                     <condition>contains('WADL', $AnalyzeIn.type)</condition>
                         <pick name="Pick3">
                             <onMessage partnerLink="WADLCallback" operation="Analyze" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" portType="tns:Receive" variable="WADLAnalyzeOut">
+                                <correlations>
+                                    <correlation set="wzrd_set_Invoke3_OnMessage_Pick3_Analyze" initiate="no"/>
+                                </correlations>
                                 <empty name="Empty3"/>
                             </onMessage>
                                 <onAlarm>
