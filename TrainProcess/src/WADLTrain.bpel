@@ -20,8 +20,8 @@
     <variables>
         <variable name="TrainOnFileOut" xmlns:tns="http://service.wscat.soen487/" messageType="tns:trainOnFileResponse"/>
         <variable name="TrainOnFileIn" xmlns:tns="http://service.wscat.soen487/" messageType="tns:trainOnFile"/>
-        <variable name="TrainOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" messageType="tns:TrainResponse"/>
-        <variable name="TrainIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" messageType="tns:TrainRequest"/>
+        <variable name="TrainOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" messageType="tns:TrainResponseWADL"/>
+        <variable name="TrainIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" messageType="tns:TrainRequestWADL"/>
     </variables>
     <sequence>
         <receive name="Receive1" createInstance="yes" partnerLink="Invoke" operation="Train" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" portType="tns:Invoke" variable="TrainIn"/>

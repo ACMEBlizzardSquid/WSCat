@@ -11,20 +11,20 @@
     <message name="InitializeResponse">
         <part name="part1" type="xsd:string"/>
     </message>
-    <message name="AnalyzeRequest">
+    <message name="AnalyzeRequestWADL">
         <part name="file" type="xsd:string"/>
-        <part name="id" type="xsd:integer"/>
+        <part name="id" type="xsd:int"/>
     </message>
-    <message name="AnalyzeResponse">
+    <message name="AnalyzeResponseWADL">
         <part name="category" type="xsd:string"/>
-        <part name="id" type="xsd:integer"/>
+        <part name="id" type="xsd:int"/>
     </message>
-    <message name="TrainRequest">
+    <message name="TrainRequestWADL">
         <part name="category" type="xsd:string"/>
         <part name="file" type="xsd:string"/>
         <part name="id" type="xsd:int"/>
     </message>
-    <message name="TrainResponse">
+    <message name="TrainResponseWADL">
         <part name="response" type="xsd:string"/>
         <part name="id" type="xsd:int"/>
     </message>
@@ -33,10 +33,10 @@
             <input name="input1" message="tns:InitializeRequest"/>
         </operation>
         <operation name="Analyze">
-            <input name="input2" message="tns:AnalyzeRequest"/>
+            <input name="input2" message="tns:AnalyzeRequestWADL"/>
         </operation>
         <operation name="Train">
-            <input name="input3" message="tns:TrainRequest"/>
+            <input name="input3" message="tns:TrainRequestWADL"/>
         </operation>
     </portType>
     <portType name="Receive">
@@ -44,10 +44,10 @@
             <input name="input1" message="tns:InitializeResponse"/>
         </operation>
         <operation name="Analyze">
-            <input name="input2" message="tns:AnalyzeResponse"/>
+            <input name="input2" message="tns:AnalyzeResponseWADL"/>
         </operation>
         <operation name="Train">
-            <input name="input3" message="tns:TrainResponse"/>
+            <input name="input3" message="tns:TrainResponseWADL"/>
         </operation>
     </portType>
     <plnk:partnerLinkType name="Invoke">

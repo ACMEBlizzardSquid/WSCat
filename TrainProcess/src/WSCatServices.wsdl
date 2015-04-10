@@ -9,6 +9,7 @@
     <message name="AnalyzeRequest">
         <part name="file" type="xsd:string"/>
         <part name="type" type="xsd:string"/>
+        <part name="id" type="xsd:int"/>
     </message>
     <message name="AnalyzeResponse">
         <part name="category" type="xsd:string"/>
@@ -17,6 +18,7 @@
         <part name="file" type="xsd:string"/>
         <part name="category" type="xsd:string"/>
         <part name="type" type="xsd:string"/>
+        <part name="id" type="xsd:int"/>
     </message>
     <message name="TrainResponse">
         <part name="response" type="xsd:string"/>
