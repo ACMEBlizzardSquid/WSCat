@@ -24,11 +24,11 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>REST Service</servlet-name>
-    <url-pattern>/rest/marfcat/*</url-pattern>
+    <url-pattern>/api/marfcat/*</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>Log Service</servlet-name>
-    <url-pattern>/rest/logs/*</url-pattern>
+    <url-pattern>/api/logger/*</url-pattern>
   </servlet-mapping>
   <security-constraint>
     <web-resource-collection>

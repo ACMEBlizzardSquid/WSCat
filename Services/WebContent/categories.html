@@ -64,7 +64,7 @@
              */
             function getCategories (categoryID) {
                 superagent
-                        .get('rest/marfcat/categories/' + categoryID)
+                        .get('api/marfcat/categories/' + categoryID)
                         .end(function (res) {
                             if (res.status === 404) {
                               noCategories();

@@ -21,7 +21,7 @@ import java.util.LinkedList;
  *
  * @author connorbode
  */
-@Path("/")
+@Path("/logs")
 public class LogReader {
     
     /**
@@ -36,6 +36,21 @@ public class LogReader {
             object.add(key, map.get(key));
         }
         return object.build().toString();
+    }
+    
+    /**
+     * Builds a JSON representation of a linked list
+     * @param list The list to encode in json
+     * @return The json
+     */
+    public String buildJson (LinkedList<HashMap<String, String>> list) {
+        String json = "[";
+        for (HashMap<String,String> item : list) {
+            json += buildJson(item) + ",";
+        }
+        json = json.substring(0, json.length() - 1);
+        json += "]";
+        return json;
     }
     
     /**
@@ -61,9 +76,36 @@ public class LogReader {
             db.connect();
             results = db.find(query);
             if (results.size() == 0) {
-                throw new Exception();
+                response = Response.status(404).build();
+            } else {
+                String json = buildJson(results.getFirst());
+                response = Response.ok(json).build();
             }
-            String json = buildJson(results.getFirst());
+        } catch (Exception e) {
+            response = Response.serverError().build();
+        } finally {
+            db.close();
+        }
+        
+        return response;
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/")
+    public Response getLogs () {
+        DBConnector db = new DBConnector();
+        Response response;
+        LinkedList<HashMap<String,String>> results;
+        
+        // build the query
+        HashMap<String,String> query = new HashMap<String,String>();
+        
+        // execute the query
+        try {
+            db.connect();
+            results = db.find(query);
+            String json = buildJson(results);
             response = Response.ok(json).build();
         } catch (Exception e) {
             response = Response.serverError().build();
