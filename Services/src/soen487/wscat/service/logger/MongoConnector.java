@@ -4,9 +4,12 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import java.util.HashMap;
 import java.net.UnknownHostException;
+import java.util.LinkedList;
 
 /**
  * Manages connections and performs queries to mongo instance
@@ -41,6 +44,44 @@ public class MongoConnector {
             insert.put(key, obj.get(key));
         }
         collection.insert(insert);
+    }
+    
+    /**
+     * Retrieves all logs
+     * @return The results
+     */
+    public LinkedList<HashMap<String,String>> find () {
+        return find(new HashMap<String,String>());
+    }
+    
+    /**
+     * Performs a search for documents in the collection
+     * @param query The query to send
+     * @return The results
+     */
+    public LinkedList<HashMap<String,String>> find (HashMap<String,String> query) {
+        
+        // build mongo query
+        BasicDBObject mongoQuery = new BasicDBObject();
+        for (String key : query.keySet()) {
+            mongoQuery.put(key, query.get(key));
+        }
+        
+        // perform find query
+        DBCursor cursor = collection.find(mongoQuery);
+        
+        // iterate through results
+        LinkedList<HashMap<String, String>> result = new LinkedList<HashMap<String, String>>();
+        try {
+            while (cursor.hasNext()) {
+                DBObject next = cursor.next();
+                HashMap item = new HashMap(next.toMap());
+                result.push(item);
+            }
+        } finally {
+            cursor.close();
+        }
+        return result;
     }
     
     /**
