@@ -25,7 +25,7 @@ public class DBConnector {
     /**
      * Initializes the connection to the database
      */
-    public DBConnector () throws UnknownHostException {
+    public void connect () throws UnknownHostException {
         String databaseName = "wscat";
         String collectionName = "logs";
         String connectionString = "mongodb://beeeepel:waaallee@ds061661.mongolab.com:61661/wscat"; // i know this shouldn't be stored here but w/e
