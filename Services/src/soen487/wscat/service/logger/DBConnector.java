@@ -12,6 +12,8 @@ import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.Date;
 
+import org.bson.types.ObjectId;
+
 /**
  * Manages connections and performs queries to mongo instance
  * @author connorbode
@@ -66,7 +68,11 @@ public class DBConnector {
         // build mongo query
         BasicDBObject mongoQuery = new BasicDBObject();
         for (String key : query.keySet()) {
-            mongoQuery.put(key, query.get(key));
+            if (key == "_id") {
+                mongoQuery.put(key, new ObjectId(query.get(key)));
+            }
+            else 
+                mongoQuery.put(key, query.get(key));
         }
         
         // perform find query
@@ -77,7 +83,10 @@ public class DBConnector {
         try {
             while (cursor.hasNext()) {
                 DBObject next = cursor.next();
-                HashMap item = new HashMap(next.toMap());
+                HashMap<String, String> item = new HashMap<String, String>();
+                for (String key : next.keySet()) {
+                    item.put(key, next.get(key).toString());
+                }
                 result.push(item);
             }
         } finally {

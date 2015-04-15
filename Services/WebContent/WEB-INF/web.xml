@@ -13,10 +13,22 @@
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
+  <servlet>
+    <servlet-name>Log Service</servlet-name>
+    <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+    <init-param>
+      <param-name>jersey.config.server.provider.packages</param-name>
+      <param-value>soen487.wscat.service.logger</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
   <servlet-mapping>
     <servlet-name>REST Service</servlet-name>
     <url-pattern>/rest/marfcat/*</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Log Service</servlet-name>
+    <url-pattern>/rest/logs/*</url-pattern>
   </servlet-mapping>
   <security-constraint>
     <web-resource-collection>
