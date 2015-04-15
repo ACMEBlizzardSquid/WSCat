@@ -16,7 +16,7 @@ import java.util.Date;
  * Manages connections and performs queries to mongo instance
  * @author connorbode
  */
-public class MongoConnector {
+public class DBConnector {
     
     private MongoClient client;
     private DB database;
@@ -25,7 +25,7 @@ public class MongoConnector {
     /**
      * Initializes the connection to the database
      */
-    public MongoConnector () throws UnknownHostException {
+    public DBConnector () throws UnknownHostException {
         String databaseName = "wscat";
         String collectionName = "logs";
         String connectionString = "mongodb://beeeepel:waaallee@ds061661.mongolab.com:61661/wscat"; // i know this shouldn't be stored here but w/e
