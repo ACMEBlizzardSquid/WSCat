@@ -15,7 +15,8 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>REST Service</servlet-name>
-    <url-pattern>/api/*</url-pattern>
+    <url-pattern>/rest/marfcat/*</url-pattern>
+  </servlet-mapping>
   </servlet-mapping>
   <security-constraint>
     <web-resource-collection>
