@@ -1,73 +1,43 @@
 package soen487.wscat.service;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.InterruptedException;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import javax.ejb.EJB;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
-import javax.servlet.ServletContext;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.ws.WebServiceContext;
-import javax.xml.ws.handler.MessageContext;
 
-import org.rexcrawler.Crawler;
 import org.xml.sax.SAXException;
 
 import soen487.wscat.marfcat.Marfcat;
 import soen487.wscat.marfcat.MarfcatIn;
 import soen487.wscat.marfcat.MarfcatInItem;
 import soen487.wscat.marfcat.utils.FileDownloader;
-import soen487.wscat.parser.DocumentParser;
 import soen487.wscat.parser.ParserFactory;
-import soen487.wscat.parser.WSDLParser;
 
 @WebService
 public class WSCat {
 	
-	@Resource private WebServiceContext context;
-	private boolean initialized = false;
-	private String type = null;
+	public static final String TYPE = "WSDL";
+	public static final String FILE = "/tmp/"+TYPE+"_trainset.marfcatin";
 	
-	/**
-	 * Initialization
-	 * @throws IOException 
-	 * @throws InterruptedException 
-	 */
-	@WebMethod
-	public boolean generateTrainSet(){
+	public WSCat(){
 		try{
-			ServletContext servletContext = (ServletContext) context.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
-			type = servletContext.getInitParameter("WSCAT");
-			if(type == null)
-				throw new IOException("Invalid WSCAT");
-			String marfcatInPath = "/tmp/TrainSet.marfcatin";
-			MarfcatIn trainFile = ParserFactory.getInstance(type).getTrainSet(marfcatInPath, 10);
-			trainFile.write();
-			new Marfcat().train(marfcatInPath);
-			initialized=true;
+			File tfile = new File(FILE);
+			if(!tfile.exists()){
+				MarfcatIn trainFile = ParserFactory.getInstance(TYPE).getTrainSet(FILE, 10);
+				trainFile.write();
+				new Marfcat().train(FILE);
+			}
 		}
+		// Call logger
 		catch(IOException e) { System.err.println(e.getLocalizedMessage());}
 		catch(InterruptedException e) { System.err.println(e.getLocalizedMessage());}
-		return initialized;
-	}
-	
-	@WebMethod(operationName = "isInitialized")
-	public boolean isInitialized() {
-		ServletContext servletContext = (ServletContext) context.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
-		type = servletContext.getInitParameter("WSCAT.type");
-		return initialized;
-	}
-
-	public String getType() {
-		return type;
 	}
 	
     /**
