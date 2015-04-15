@@ -10,6 +10,7 @@ import com.mongodb.DBObject;
 import java.util.HashMap;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
+import java.util.Date;
 
 /**
  * Manages connections and performs queries to mongo instance
@@ -43,6 +44,7 @@ public class MongoConnector {
         for (String key : obj.keySet()) {
             insert.put(key, obj.get(key));
         }
+        insert.put("created_at", new Date().toString());
         collection.insert(insert);
     }
     
