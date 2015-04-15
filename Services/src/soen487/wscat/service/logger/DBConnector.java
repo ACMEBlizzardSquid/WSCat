@@ -6,11 +6,15 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.BasicDBObject;
+import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DBObject;
 import java.util.HashMap;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 import org.bson.types.ObjectId;
 
@@ -46,7 +50,7 @@ public class DBConnector {
         for (String key : obj.keySet()) {
             insert.put(key, obj.get(key));
         }
-        insert.put("created_at", new Date().toString());
+        insert.put("created_at", new Date());
         collection.insert(insert);
     }
     
@@ -54,7 +58,8 @@ public class DBConnector {
      * Retrieves all logs
      * @return The results
      */
-    public LinkedList<HashMap<String,String>> find () {
+    public LinkedList<HashMap<String,String>> find ()
+            throws ParseException {
         return find(new HashMap<String,String>());
     }
     
@@ -63,16 +68,27 @@ public class DBConnector {
      * @param query The query to send
      * @return The results
      */
-    public LinkedList<HashMap<String,String>> find (HashMap<String,String> query) {
+    public LinkedList<HashMap<String,String>> find (HashMap<String,String> query)
+        throws ParseException {
         
         // build mongo query
         BasicDBObject mongoQuery = new BasicDBObject();
         for (String key : query.keySet()) {
             if (key == "_id") {
                 mongoQuery.put(key, new ObjectId(query.get(key)));
-            }
-            else 
+            } else if (key == "created_at") {
+                String dateValue = query.get(key);
+                String[] values = dateValue.split("-");
+                DateFormat parser = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                Date startDate = parser.parse(values[0]);
+                Date endDate = parser.parse(values[1]);
+                mongoQuery.put("created_at", BasicDBObjectBuilder
+                    .start("$gte", startDate)
+                    .add("$lte", endDate)
+                    .get());
+            } else {
                 mongoQuery.put(key, query.get(key));
+            }
         }
         
         // perform find query

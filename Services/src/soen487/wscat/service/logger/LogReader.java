@@ -6,6 +6,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.QueryParam;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -50,6 +51,9 @@ public class LogReader {
         }
         json = json.substring(0, json.length() - 1);
         json += "]";
+        if (list.size() == 0) {
+            json = "[]";
+        }
         return json;
     }
     
@@ -93,13 +97,18 @@ public class LogReader {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/")
-    public Response getLogs () {
+    public Response getLogs (
+            @QueryParam("date") String date
+    ) {
         DBConnector db = new DBConnector();
         Response response;
         LinkedList<HashMap<String,String>> results;
         
         // build the query
         HashMap<String,String> query = new HashMap<String,String>();
+        if (date != null) {
+            query.put("created_at", date);
+        }
         
         // execute the query
         try {
