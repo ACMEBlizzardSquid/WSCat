@@ -1,4 +1,4 @@
-package soen487.wscat.service.logger;
+package logger;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
@@ -92,7 +92,11 @@ public class DBConnector {
         }
         
         // perform find query
-        DBCursor cursor = collection.find(mongoQuery);
+        DBCursor cursor;
+        if (mongoQuery.size() == 0)
+            cursor = collection.find();
+        else 
+            cursor = collection.find(mongoQuery);
         
         // iterate through results
         LinkedList<HashMap<String, String>> result = new LinkedList<HashMap<String, String>>();
@@ -105,6 +109,8 @@ public class DBConnector {
                 }
                 result.push(item);
             }
+        } catch (Exception e) {
+            System.out.println(e);
         } finally {
             cursor.close();
         }

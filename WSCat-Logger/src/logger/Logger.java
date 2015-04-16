@@ -1,4 +1,4 @@
-package soen487.wscat.service.logger;
+package logger;
 
 import javax.jws.WebService;
 import javax.jws.WebMethod;
@@ -50,7 +50,6 @@ public class Logger {
         insert.put("source", source);
         insert.put("message", message);
         insert.put("severity", severity);
-        insert.put("referer", referer);
         insert.put("ip", IP);
         insert.put("host", host);
         

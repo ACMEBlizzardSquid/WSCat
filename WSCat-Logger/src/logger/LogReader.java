@@ -1,4 +1,4 @@
-package soen487.wscat.service.logger;
+package logger;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
