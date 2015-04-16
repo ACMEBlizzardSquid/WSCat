@@ -32,7 +32,9 @@ public class Logger {
     public boolean log(
         @WebParam(name = "source") String source, 
         @WebParam(name = "message") String message,
-        @WebParam(name = "severity") String severity
+        @WebParam(name = "stackTrace") String stackTrace, 
+        @WebParam(name = "severity") String severity,
+        @WebParam(name = "extra") String extra
     ) {
         
         DBConnector db = new DBConnector();
@@ -49,6 +51,8 @@ public class Logger {
         HashMap<String,String> insert = new HashMap<String,String>();
         insert.put("source", source);
         insert.put("message", message);
+        insert.put("stack_trace", stackTrace);
+        insert.put("extra_details", extra);
         insert.put("severity", severity);
         insert.put("ip", IP);
         insert.put("host", host);
