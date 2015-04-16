@@ -34,6 +34,7 @@ public class Marfcat {
     private FileOutputStream errorOut;
     private PrintStream consolePrinter;
     private PrintStream errorPrinter;
+    private static boolean trained = false;
     
     /**
      * Initializes the facade
@@ -129,6 +130,7 @@ public class Marfcat {
             System.out.println(e);
         }
         resetOutput();
+        trained = true;
         return rootPath + "/" + stdoutPath;
     }
     
@@ -151,7 +153,11 @@ public class Marfcat {
      * @throws InterruptedException 
      */
     public String analyze (String inputFilePath)
-            throws IOException, InterruptedException {
+            throws IOException, InterruptedException, MarfcatNotTrainedException {
+        
+        if (!trained) {
+            throw new MarfcatNotTrainedException();
+        }
         
         // generate UUID for file
         String uuid = UUID.randomUUID().toString().replace("-", "");
@@ -170,7 +176,6 @@ public class Marfcat {
         String inputBlah = inputFilePath.replace("/", "");
         
         redirectOutput(inputBlah);
-        System.out.println("RUNNING MARFCAT");
         try {
             runMarfcat(options);
         } catch (Exception e) {

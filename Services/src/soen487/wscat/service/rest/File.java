@@ -19,6 +19,7 @@ import javax.ws.rs.core.MediaType;
 import soen487.wscat.marfcat.Marfcat;
 import soen487.wscat.marfcat.MarfcatIn;
 import soen487.wscat.marfcat.MarfcatInItem;
+import soen487.wscat.marfcat.MarfcatNotTrainedException;
 import soen487.wscat.marfcat.utils.FileDownloader;
 import soen487.wscat.parser.WSDLParser;
 import soen487.wscat.service.WSCat;
@@ -70,7 +71,7 @@ public class File {
          */
 	@POST
 	@Consumes(MediaType.TEXT_XML)
-	public String postFileEntry(String file){
+	public String postFileEntry(String file) throws MarfcatNotTrainedException {
             
             StringBuilder sb = new StringBuilder();
             try {

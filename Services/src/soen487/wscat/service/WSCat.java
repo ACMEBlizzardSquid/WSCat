@@ -17,6 +17,7 @@ import org.xml.sax.SAXException;
 import soen487.wscat.marfcat.Marfcat;
 import soen487.wscat.marfcat.MarfcatIn;
 import soen487.wscat.marfcat.MarfcatInItem;
+import soen487.wscat.marfcat.MarfcatNotTrainedException;
 import soen487.wscat.marfcat.utils.FileDownloader;
 import soen487.wscat.parser.ParserFactory;
 
@@ -51,7 +52,7 @@ public class WSCat {
      */
     @WebMethod(operationName = "analyzeFile")
     public String analyzeFile(@WebParam(name = "file") String file) 
-            throws IOException, InterruptedException {
+            throws IOException, InterruptedException, MarfcatNotTrainedException {
         
         try {
             String localPath = FileDownloader.download(file);
@@ -115,7 +116,7 @@ public class WSCat {
             @WebParam(name = "category") String category
     ) 
             throws ParserConfigurationException, SAXException, IOException,
-                    InterruptedException {
+                    InterruptedException, MarfcatNotTrainedException {
         try {
             
             // download the file
@@ -158,7 +159,7 @@ public class WSCat {
      * @param category The subject of the file
      */
     private String train (String localPath, String category) 
-            throws IOException, InterruptedException {
+            throws IOException, InterruptedException, MarfcatNotTrainedException {
         
         
         MarfcatIn marfIn = new MarfcatIn();
