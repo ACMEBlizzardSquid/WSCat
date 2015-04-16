@@ -20,6 +20,8 @@ import soen487.wscat.marfcat.MarfcatInItem;
 import soen487.wscat.marfcat.utils.FileDownloader;
 import soen487.wscat.parser.ParserFactory;
 
+import soen487.wscat.logger.Logger;
+
 @WebService
 public class WSCat {
 	
@@ -51,27 +53,32 @@ public class WSCat {
     public String analyzeFile(@WebParam(name = "file") String file) 
             throws IOException, InterruptedException {
         
-        String localPath = FileDownloader.download(file);
-        MarfcatIn marfIn = new MarfcatIn();
-        Marfcat marf = new Marfcat();
-        MarfcatInItem marfcatInItem = new MarfcatInItem();
-        marfcatInItem.setPath(localPath);
-        marfcatInItem.loadFileInfo();
-        marfIn.addItem(marfcatInItem);
-        String marfInPath = marfIn.getPath();
-        marfIn.write();
-        String MARFCAT_OUT = marf.analyze(marfInPath);    
-        BufferedReader br = new BufferedReader(new FileReader(MARFCAT_OUT));
-        StringBuilder sb = new StringBuilder();
-        String line = br.readLine();
+        try {
+            String localPath = FileDownloader.download(file);
+            MarfcatIn marfIn = new MarfcatIn();
+            Marfcat marf = new Marfcat();
+            MarfcatInItem marfcatInItem = new MarfcatInItem();
+            marfcatInItem.setPath(localPath);
+            marfcatInItem.loadFileInfo();
+            marfIn.addItem(marfcatInItem);
+            String marfInPath = marfIn.getPath();
+            marfIn.write();
+            String MARFCAT_OUT = marf.analyze(marfInPath);    
+            BufferedReader br = new BufferedReader(new FileReader(MARFCAT_OUT));
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
 
-        while (line != null) {
-            sb.append(line);
-            sb.append("\n");
-            line = br.readLine();
+            while (line != null) {
+                sb.append(line);
+                sb.append("\n");
+                line = br.readLine();
+            }
+            br.close();
+            return sb.toString();
+        } catch (Exception e) {
+            Logger.log(e, "100");
+            throw e;
         }
-        br.close();
-        return sb.toString();
     }
 
     /*
@@ -109,12 +116,18 @@ public class WSCat {
     ) 
             throws ParserConfigurationException, SAXException, IOException,
                     InterruptedException {
-        
-        // download the file
-        String localPath = FileDownloader.download(file);
+        try {
+            
+            // download the file
+            String localPath = FileDownloader.download(file);
 
-        // submit the file for training
-        return train(localPath, category);
+            // submit the file for training
+            return train(localPath, category);
+        
+        } catch (Exception e) {
+            Logger.log(e, "100");
+            throw e;
+        }
     }
     
     /**
