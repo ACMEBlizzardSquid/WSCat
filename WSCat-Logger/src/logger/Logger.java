@@ -4,6 +4,11 @@ import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 
+import javax.xml.ws.handler.MessageContext;
+import javax.xml.ws.WebServiceContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.annotation.Resource;
+
 import java.util.HashMap;
 
 /**
@@ -12,6 +17,9 @@ import java.util.HashMap;
  */
 @WebService(serviceName = "Logger")
 public class Logger {
+    
+    @Resource
+    WebServiceContext context;
 
     /**
      * Logs an error to the database
@@ -30,11 +38,21 @@ public class Logger {
         DBConnector db = new DBConnector();
         boolean result = true;
         
+        // get the source IP to track the origin
+        MessageContext mc = context.getMessageContext();
+        HttpServletRequest req = (HttpServletRequest) mc.get(MessageContext.SERVLET_REQUEST);
+        String IP = req.getRemoteAddr();
+        String host = req.getRemoteHost();
+        String referer = req.getHeader("Referer");
+        
         // build the insert query
         HashMap<String,String> insert = new HashMap<String,String>();
         insert.put("source", source);
         insert.put("message", message);
         insert.put("severity", severity);
+        insert.put("referer", referer);
+        insert.put("ip", IP);
+        insert.put("host", host);
         
         // attempt to perform the insert
         try {    
