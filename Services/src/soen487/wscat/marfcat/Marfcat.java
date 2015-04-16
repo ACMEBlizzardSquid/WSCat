@@ -71,7 +71,7 @@ public class Marfcat {
         consolePrinter = new PrintStream(consoleOut);
         errorPrinter = new PrintStream(errorOut);
         System.setOut(consolePrinter);
-        System.setErr(errorPrinter);
+//        System.setErr(errorPrinter);
         return prefix + file + "-console.txt";
     }
     
@@ -86,7 +86,21 @@ public class Marfcat {
         consoleOut.close();
         errorOut.close();
         System.setOut(console);
-        System.setErr(err);
+//        System.setErr(err);
+    }
+    
+    
+    /**
+     * Manages calls to MARFCAT
+     * @param options Options to pass to MARFCAT
+     * @throws InterruptedException 
+     */
+    private void runMarfcat (String[] options) 
+            throws Exception {
+        
+        MARFCATApp oApp = new MARFCATApp();
+        oApp.init();
+        oApp.process(options);
     }
     
     /**
@@ -156,8 +170,9 @@ public class Marfcat {
         String inputBlah = inputFilePath.replace("/", "");
         
         redirectOutput(inputBlah);
+        System.out.println("RUNNING MARFCAT");
         try {
-            marf.apps.MARFCAT.MARFCATApp.main(options);
+            runMarfcat(options);
         } catch (Exception e) {
             System.out.println(e.toString());
         }
