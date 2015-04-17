@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<casa xmlns="http://java.sun.com/xml/ns/casa" xmlns:ns1="http://enterprise.netbeans.org/bpel/WSCat-Processes/WSDLAnalyze" xmlns:ns2="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" xmlns:ns3="http://enterprise.netbeans.org/bpel/WSCat-Processes/RESTAnalyze" xmlns:ns4="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" xmlns:ns5="http://enterprise.netbeans.org/bpel/WSCat-Processes/WADLAnalyze" xmlns:ns6="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" xmlns:ns7="http://enterprise.netbeans.org/bpel/WSCat-Processes/Analyze" xmlns:ns8="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" xmlns:ns9="http://service.wscat.soen487/" xmlns:xlink="http://www.w3.org/2000/xlink" xmlns:ns="AnalyzeCA">
+    <endpoints>
+        <endpoint display-name="Invoke" endpoint-name="WSDLInvoke_myRole" file-path="WSDLAnalyze.bpel" interface-name="ns2:Invoke" name="endpoint1" process-name="WSDLAnalyze" service-name="ns1:Invoke"/>
+        <endpoint display-name="Invoke" endpoint-name="RESTInvoke_myRole" file-path="RESTAnalyze.bpel" interface-name="ns4:Invoke" name="endpoint2" process-name="RESTAnalyze" service-name="ns3:Invoke"/>
+        <endpoint display-name="Invoke" endpoint-name="WADLInvoke_myRole" file-path="WADLAnalyze.bpel" interface-name="ns6:Invoke" name="endpoint3" process-name="WADLAnalyze" service-name="ns5:Invoke"/>
+        <endpoint display-name="Client" endpoint-name="WSCatServicesPortTypeRole_myRole" file-path="Analyze.bpel" interface-name="ns8:WSCatServicesPortType" name="endpoint4" process-name="Analyze" service-name="ns7:Client"/>
+        <endpoint display-name="WSDLCallback" endpoint-name="WSDLReceive_myRole" file-path="Analyze.bpel" interface-name="ns2:Response" name="endpoint5" process-name="Analyze" service-name="ns7:WSDLCallback"/>
+        <endpoint display-name="RESTCallback" endpoint-name="RESTReceive_myRole" file-path="Analyze.bpel" interface-name="ns4:Response" name="endpoint6" process-name="Analyze" service-name="ns7:RESTCallback"/>
+        <endpoint display-name="WADLCallback" endpoint-name="WADLReceive_myRole" file-path="Analyze.bpel" interface-name="ns6:Receive" name="endpoint7" process-name="Analyze" service-name="ns7:WADLCallback"/>
+        <endpoint display-name="SYNC" endpoint-name="WSDLSynchronous_partnerRole" file-path="WSDLAnalyze.bpel" interface-name="ns9:WSCat" name="endpoint8" process-name="WSDLAnalyze" service-name="ns1:SYNC"/>
+        <endpoint display-name="Receive" endpoint-name="WSDLReceive_partnerRole" file-path="WSDLAnalyze.bpel" interface-name="ns2:Response" name="endpoint9" process-name="WSDLAnalyze" service-name="ns1:Receive"/>
+        <endpoint display-name="SYNC" endpoint-name="WSCatSync_partnerRole" file-path="RESTAnalyze.bpel" interface-name="ns9:WSCat" name="endpoint10" process-name="RESTAnalyze" service-name="ns3:SYNC"/>
+        <endpoint display-name="Receive" endpoint-name="RESTReceive_partnerRole" file-path="RESTAnalyze.bpel" interface-name="ns4:Response" name="endpoint11" process-name="RESTAnalyze" service-name="ns3:Receive"/>
+        <endpoint display-name="SYNC" endpoint-name="role1_partnerRole" file-path="WADLAnalyze.bpel" interface-name="ns9:WSCat" name="endpoint12" process-name="WADLAnalyze" service-name="ns5:SYNC"/>
+        <endpoint display-name="Receive" endpoint-name="WADLReceive_partnerRole" file-path="WADLAnalyze.bpel" interface-name="ns6:Receive" name="endpoint13" process-name="WADLAnalyze" service-name="ns5:Receive"/>
+        <endpoint display-name="WADL" endpoint-name="WADLInvoke_partnerRole" file-path="Analyze.bpel" interface-name="ns6:Invoke" name="endpoint14" process-name="Analyze" service-name="ns7:WADL"/>
+        <endpoint display-name="REST" endpoint-name="RESTInvoke_partnerRole" file-path="Analyze.bpel" interface-name="ns4:Invoke" name="endpoint15" process-name="Analyze" service-name="ns7:REST"/>
+        <endpoint display-name="WSDL" endpoint-name="WSDLInvoke_partnerRole" file-path="Analyze.bpel" interface-name="ns2:Invoke" name="endpoint16" process-name="Analyze" service-name="ns7:WSDL"/>
+        <endpoint endpoint-name="WSCatPort" interface-name="ns9:WSCat" name="endpoint17" service-name="ns9:WSCatService"/>
+        <endpoint name="endpoint18" endpoint-name="casaPort1" interface-name="ns8:WSCatServicesPortType" service-name="ns:AnalyzeCAService1"/>
+    </endpoints>
+    <service-units>
+        <service-engine-service-unit artifacts-zip="WSCat-Analyze.jar" component-name="sun-bpel-engine" defined="true" description="Represents this Service Unit" internal="true" name="AnalyzeCA-WSCat-Analyze" unit-name="WSCat-Analyze" unknown="false" x="134" y="97">
+            <provides endpoint="endpoint1"/>
+            <provides endpoint="endpoint2"/>
+            <provides endpoint="endpoint3"/>
+            <provides endpoint="endpoint4"/>
+            <provides endpoint="endpoint5"/>
+            <provides endpoint="endpoint6"/>
+            <provides endpoint="endpoint7"/>
+            <consumes endpoint="endpoint8"/>
+            <consumes endpoint="endpoint9"/>
+            <consumes endpoint="endpoint10"/>
+            <consumes endpoint="endpoint11"/>
+            <consumes endpoint="endpoint12"/>
+            <consumes endpoint="endpoint13"/>
+            <consumes endpoint="endpoint14"/>
+            <consumes endpoint="endpoint15"/>
+            <consumes endpoint="endpoint16"/>
+        </service-engine-service-unit>
+        <binding-component-service-unit artifacts-zip="sun-http-binding.jar" component-name="sun-http-binding" description="Represents this Service Unit" name="AnalyzeCA-sun-http-binding" unit-name="sun-http-binding">
+            <ports>
+                <port x="67" y="37">
+                    <link xlink:href="../jbiServiceUnits/WSCat-Analyze/RESTService.wsdl#xpointer(/definitions/service[@name='WSCatService']/port[@name='WSCatPort'])" xlink:type="simple"/>
+                    <consumes endpoint="endpoint17"/>
+                    <provides endpoint="endpoint17"/>
+                </port>
+                <port x="67" y="153" bindingType="soap">
+                    <link xlink:href="../jbiasa/AnalyzeCA.wsdl#xpointer(/definitions/service[@name=&apos;AnalyzeCAService1&apos;]/port[@name=&apos;casaPort1&apos;])" xlink:type="simple"/>
+                    <consumes endpoint="endpoint18"/>
+                    <provides endpoint="endpoint18"/>
+                </port>
+            </ports>
+        </binding-component-service-unit>
+    </service-units>
+    <connections>
+        <connection consumer="endpoint11" provider="endpoint6" state="unchanged"/>
+        <connection consumer="endpoint15" provider="endpoint2" state="unchanged"/>
+        <connection consumer="endpoint9" provider="endpoint5" state="unchanged"/>
+        <connection consumer="endpoint8" provider="endpoint17" state="unchanged"/>
+        <connection consumer="endpoint10" provider="endpoint17" state="unchanged"/>
+        <connection consumer="endpoint12" provider="endpoint17" state="unchanged"/>
+        <connection consumer="endpoint13" provider="endpoint7" state="unchanged"/>
+        <connection consumer="endpoint16" provider="endpoint1" state="unchanged"/>
+        <connection consumer="endpoint14" provider="endpoint3" state="unchanged"/>
+        <connection state="new" consumer="endpoint18" provider="endpoint4"/>
+    </connections>
+    <porttypes>
+        <link xlink:href="../jbiServiceUnits/WSCat-Analyze/RESTServiceWrapper.wsdl#xpointer(/definitions/portType[@name='Invoke'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/WSCat-Analyze/RESTServiceWrapper.wsdl#xpointer(/definitions/portType[@name='Response'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/WSCat-Analyze/WADLServiceWrapper.wsdl#xpointer(/definitions/portType[@name='Invoke'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/WSCat-Analyze/WADLServiceWrapper.wsdl#xpointer(/definitions/portType[@name='Receive'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/WSCat-Analyze/WSCatServices.wsdl#xpointer(/definitions/portType[@name='WSCatServicesPortType'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/WSCat-Analyze/RESTService.wsdl#xpointer(/definitions/portType[@name='WSCat'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/WSCat-Analyze/WADLService.wsdl#xpointer(/definitions/portType[@name='WSCat'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/WSCat-Analyze/WSDLServiceWrapper.wsdl#xpointer(/definitions/portType[@name='Invoke'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/WSCat-Analyze/WSDLServiceWrapper.wsdl#xpointer(/definitions/portType[@name='Response'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/WSCat-Analyze/WSDLService.wsdl#xpointer(/definitions/portType[@name='WSCat'])" xlink:type="simple"/>
+        <link xlink:href="../jbiasa/AnalyzeCA.wsdl#xpointer(/definitions/portType[@name=&apos;dummyCasaPortType&apos;])" xlink:type="simple"/>
+    </porttypes>
+    <bindings>
+        <link xlink:href="../jbiServiceUnits/WSCat-Analyze/RESTService.wsdl#xpointer(/definitions/binding[@name='WSCatPortBinding'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/WSCat-Analyze/WADLService.wsdl#xpointer(/definitions/binding[@name='WSCatPortBinding'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/WSCat-Analyze/WSDLService.wsdl#xpointer(/definitions/binding[@name='WSCatPortBinding'])" xlink:type="simple"/>
+    </bindings>
+    <services>
+        <link xlink:href="../jbiServiceUnits/WSCat-Analyze/RESTService.wsdl#xpointer(/definitions/service[@name='WSCatService'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/WSCat-Analyze/WADLService.wsdl#xpointer(/definitions/service[@name='WSCatService'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/WSCat-Analyze/WSDLService.wsdl#xpointer(/definitions/service[@name='WSCatService'])" xlink:type="simple"/>
+    </services>
+    <regions>
+        <region name="WSDL Endpoints" width="150"/>
+        <region name="JBI Modules" width="500"/>
+        <region name="External Modules" width="200"/>
+    </regions>
+</casa>

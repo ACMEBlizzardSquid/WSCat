@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<process
+    name="Train"
+    targetNamespace="http://enterprise.netbeans.org/bpel/WSCat-Processes/Train"
+    xmlns:tns="http://enterprise.netbeans.org/bpel/WSCat-Processes/Train"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+    xmlns:sxt="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Trace" 
+    xmlns:sxed="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor2"
+    xmlns:sxat="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Attachment"
+    xmlns:sxeh="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/ErrorHandling" xmlns:ns0="http://enterprise.netbeans.org/bpel/WizardCorrelationProperties">
+    <import namespace="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" location="WSCatServices.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" location="RESTServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://service.wscat.soen487/" location="RESTService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" location="WADLServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://service.wscat.soen487/" location="WADLService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" location="WSDLServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://service.wscat.soen487/" location="WSDLService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://enterprise.netbeans.org/bpel/WizardCorrelationProperties" location="WizardCorrelationProperties.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <partnerLinks>
+        <partnerLink name="WSDLInvoke" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" partnerLinkType="tns:Invoke" partnerRole="WSDLInvoke"/>
+        <partnerLink name="WADLInvoke" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" partnerLinkType="tns:Invoke" partnerRole="WADLInvoke"/>
+        <partnerLink name="RESTInvoke" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" partnerLinkType="tns:Invoke" partnerRole="RESTInvoke"/>
+        <partnerLink name="Client" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" partnerLinkType="tns:WSCatServices" myRole="WSCatServicesPortTypeRole"/>
+        <partnerLink name="WSDLReceive" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" partnerLinkType="tns:Receive" myRole="WSDLReceive"/>
+        <partnerLink name="WADLReceive" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" partnerLinkType="tns:Receive" myRole="WADLReceive"/>
+        <partnerLink name="RESTReceive" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" partnerLinkType="tns:Receive" myRole="RESTReceive"/>
+    </partnerLinks>
+    <variables>
+        <variable name="TrainOutWADL" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" messageType="tns:TrainResponseWADL"/>
+        <variable name="TrainOutREST" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" messageType="tns:TrainResponseREST"/>
+        <variable name="TrainOutWSDL" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" messageType="tns:TrainResponseWSDL"/>
+        <variable name="TrainInWADL" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" messageType="tns:TrainRequestWADL"/>
+        <variable name="TrainInREST" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" messageType="tns:TrainRequestREST"/>
+        <variable name="TrainInWSDL" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" messageType="tns:TrainRequestWSDL"/>
+        <variable name="Response" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" messageType="tns:TrainResponse"/>
+        <variable name="Request" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" messageType="tns:TrainRequest"/>
+    </variables>
+    <correlationSets>
+        <correlationSet name="wzrd_set_Invoke1_OnMessage_Pick1_Train" properties="ns0:wzrd_prop_int_int"/>
+        <correlationSet name="wzrd_set_Invoke2_OnMessage_Pick2_Train" properties="ns0:wzrd_prop_int_int"/>
+        <correlationSet name="wzrd_set_Invoke3_OnMessage_Pick3_Train" properties="ns0:wzrd_prop_int_int"/>
+    </correlationSets>
+    <sequence>
+        <receive name="Request" createInstance="yes" partnerLink="Client" operation="Train" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" portType="tns:WSCatServicesPortType" variable="Request"/>
+        <assign name="Assign1">
+            <copy>
+                <from variable="Request" part="file"/>
+                <to variable="TrainInWADL" part="file"/>
+            </copy>
+            <copy>
+                <from variable="Request" part="file"/>
+                <to variable="TrainInREST" part="file"/>
+            </copy>
+            <copy>
+                <from variable="Request" part="file"/>
+                <to variable="TrainInWSDL" part="file"/>
+            </copy>
+            <copy>
+                <from variable="Request" part="category"/>
+                <to variable="TrainInWADL" part="category"/>
+            </copy>
+            <copy>
+                <from variable="Request" part="category"/>
+                <to variable="TrainInREST" part="category"/>
+            </copy>
+            <copy>
+                <from variable="Request" part="category"/>
+                <to variable="TrainInWSDL" part="category"/>
+            </copy>
+            <copy>
+                <from variable="Request" part="id"/>
+                <to variable="TrainInWADL" part="id"/>
+            </copy>
+            <copy>
+                <from variable="Request" part="id"/>
+                <to variable="TrainInREST" part="id"/>
+            </copy>
+            <copy>
+                <from variable="Request" part="id"/>
+                <to variable="TrainInWSDL" part="id"/>
+            </copy>
+        </assign>
+        <flow name="Invokes">
+            <sequence name="WSDL">
+                <if name="If1">
+                    <condition>contains($Request.type, 'WSDL')</condition>
+                    <sequence name="Sequence1">
+                        <invoke name="Invoke1" partnerLink="WSDLInvoke" operation="Train" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" portType="tns:Invoke" inputVariable="TrainInWSDL">
+                            <correlations>
+                                <correlation set="wzrd_set_Invoke1_OnMessage_Pick1_Train" initiate="yes"/>
+                            </correlations>
+                        </invoke>
+                        <pick name="Pick1" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper">
+                            <onMessage partnerLink="WSDLReceive" operation="Train" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" portType="tns:Response" variable="TrainOutWSDL">
+                                <correlations>
+                                    <correlation set="wzrd_set_Invoke1_OnMessage_Pick1_Train" initiate="no"/>
+                                </correlations>
+                                <empty name="Empty5"/>
+                                </onMessage>
+                                <onAlarm>
+                                    <for>'P0Y0M0DT0H0M0S'</for>
+                                        <assign name="Assign3">
+                                            <copy>
+                                                    <from>''</from>
+                                                        <to variable="TrainOutWSDL" part="response"/>
+                                                </copy>
+                                        </assign>
+                                </onAlarm>
+                        </pick>
+                    </sequence>
+                </if>
+            </sequence>
+            <sequence name="REST">
+                <if name="If2">
+                    <condition>contains($Request.type, 'REST')</condition>
+                    <sequence name="Sequence2">
+                        <invoke name="Invoke2" partnerLink="RESTInvoke" operation="Train" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" portType="tns:Invoke" inputVariable="TrainInREST">
+                            <correlations>
+                                <correlation set="wzrd_set_Invoke2_OnMessage_Pick2_Train" initiate="yes"/>
+                            </correlations>
+                        </invoke>
+                        <pick name="Pick2" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2">
+                            <onMessage partnerLink="RESTReceive" operation="Train" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" portType="tns:Response" variable="TrainOutREST">
+                                <correlations>
+                                    <correlation set="wzrd_set_Invoke2_OnMessage_Pick2_Train" initiate="no"/>
+                                </correlations>
+                                <empty name="Empty3"/>
+                                </onMessage>
+                                <onAlarm>
+                                    <for>'P0Y0M0DT0H0M0S'</for>
+                                        <assign name="Assign4">
+                                            <copy>
+                                                    <from>''</from>
+                                                        <to variable="TrainOutREST" part="response"/>
+                                                </copy>
+                                        </assign>
+                                </onAlarm>
+                        </pick>
+                    </sequence>
+                </if>
+            </sequence>
+            <sequence name="WADL">
+                <if name="If3">
+                    <condition>contains($Request.type, 'WADL')</condition>
+                    <sequence name="Sequence3">
+                        <invoke name="Invoke3" partnerLink="WADLInvoke" operation="Train" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" portType="tns:Invoke" inputVariable="TrainInWADL">
+                            <correlations>
+                                <correlation set="wzrd_set_Invoke3_OnMessage_Pick3_Train" initiate="yes"/>
+                            </correlations>
+                        </invoke>
+                        <pick name="Pick3" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper">
+                            <onMessage partnerLink="WADLReceive" operation="Train" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WADLServiceWrapper" portType="tns:Receive" variable="TrainOutWADL">
+                                <correlations>
+                                    <correlation set="wzrd_set_Invoke3_OnMessage_Pick3_Train" initiate="no"/>
+                                </correlations>
+                                <empty name="Empty6"/>
+                                </onMessage>
+                                <onAlarm>
+                                    <for>'P0Y0M0DT0H0M0S'</for>
+                                        <assign name="Assign5">
+                                            <copy>
+                                                    <from>''</from>
+                                                        <to variable="TrainOutWADL" part="response"/>
+                                                </copy>
+                                        </assign>
+                                </onAlarm>
+                        </pick>
+                    </sequence>
+                </if>
+            </sequence>
+        </flow>
+        <assign name="Assign2">
+            <copy>
+                <from>concat(concat(concat(concat($TrainOutWSDL.response, '|'), $TrainOutREST.response), '|'), $TrainOutWADL.response)</from>
+                <to variable="Response" part="response"/>
+            </copy>
+        </assign>
+        <reply name="Response" partnerLink="Client" operation="Train" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSCatServices" portType="tns:WSCatServicesPortType" variable="Response"/>
+    </sequence>
+</process>

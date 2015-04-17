@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="WSDLServiceWrapper" targetNamespace="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/WSDLServiceWrapper" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:ns4="http://service.wscat.soen487/">
+    <import location="WSDLService.wsdl" namespace="http://service.wscat.soen487/"/>
+    <types/>
+    <message name="InitializeRequest">
+        <part name="part1" type="xsd:string"/>
+    </message>
+    <message name="InitializeResponse">
+        <part name="part1" type="xsd:string"/>
+    </message>
+    <message name="AnalyzeRequestWSDL">
+        <part name="file" type="xsd:string"/>
+        <part name="id" type="xsd:int"/>
+    </message>
+    <message name="AnalyzeResponseWSDL">
+        <part name="category" type="xsd:string"/>
+        <part name="id" type="xsd:int"/>
+    </message>
+    <message name="TrainRequestWSDL">
+        <part name="category" type="xsd:string"/>
+        <part name="file" type="xsd:string"/>
+        <part name="id" type="xsd:int"/>
+    </message>
+    <message name="TrainResponseWSDL">
+        <part name="response" type="xsd:string"/>
+        <part name="id" type="xsd:int"/>
+    </message>
+    <portType name="Invoke">
+        <operation name="Initialize">
+            <input name="input1" message="tns:InitializeRequest"/>
+        </operation>
+        <operation name="Analyze">
+            <input name="input2" message="tns:AnalyzeRequestWSDL"/>
+        </operation>
+        <operation name="Train">
+            <input name="input3" message="tns:TrainRequestWSDL"/>
+        </operation>
+    </portType>
+    <portType name="Response">
+        <operation name="Initialize">
+            <input name="input1" message="tns:InitializeResponse"/>
+        </operation>
+        <operation name="Analyze">
+            <input name="input2" message="tns:AnalyzeResponseWSDL"/>
+        </operation>
+        <operation name="Train">
+            <input name="input3" message="tns:TrainResponseWSDL"/>
+        </operation>
+    </portType>
+    <plnk:partnerLinkType name="Synchronous">
+        <!-- A partner link type is automatically generated when a new port type is added. Partner link types are used by BPEL processes. 
+In a BPEL process, a partner link represents the interaction between the BPEL process and a partner service. Each partner link is associated with a partner link type.
+A partner link type characterizes the conversational relationship between two services. The partner link type can have one or two roles.-->
+        <plnk:role name="WSDLSynchronous" portType="ns4:WSCat"/>
+    </plnk:partnerLinkType>
+    <plnk:partnerLinkType name="Invoke">
+        <plnk:role name="WSDLInvoke" portType="tns:Invoke"/>
+    </plnk:partnerLinkType>
+    <plnk:partnerLinkType name="Receive">
+        <!-- A partner link type is automatically generated when a new port type is added. Partner link types are used by BPEL processes. 
+In a BPEL process, a partner link represents the interaction between the BPEL process and a partner service. Each partner link is associated with a partner link type.
+A partner link type characterizes the conversational relationship between two services. The partner link type can have one or two roles.-->
+        <plnk:role name="WSDLReceive" portType="tns:Response"/>
+    </plnk:partnerLinkType>
+</definitions>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="RESTServiceWrapper2" targetNamespace="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2" xmlns:ns0="http://service.wscat.soen487/" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:ns1="http://service.wscat.soen487/">
+    <import location="RESTService.wsdl" namespace="http://service.wscat.soen487/"/>
+    <types>
+        <xsd:schema targetNamespace="http://j2ee.netbeans.org/wsdl/Processes/src/RESTServiceWrapper2">
+            <xsd:import namespace="http://service.wscat.soen487/" schemaLocation="RESTServiceSchema.xsd"/>
+        </xsd:schema>
+    </types>
+    <message name="InitializeRequest"/>
+    <message name="InitializeResponse">
+        <part name="response" element="ns0:generateTrainSet"/>
+    </message>
+    <message name="AnalyzeRequestREST">
+        <part name="file" type="xsd:string"/>
+        <part name="id" type="xsd:int"/>
+    </message>
+    <message name="AnalyzeResponseREST">
+        <part name="category" type="xsd:string"/>
+        <part name="id" type="xsd:int"/>
+    </message>
+    <message name="TrainRequestREST">
+        <part name="file" type="xsd:string"/>
+        <part name="category" type="xsd:string"/>
+        <part name="id" type="xsd:int"/>
+    </message>
+    <message name="TrainResponseREST">
+        <part name="response" type="xsd:string"/>
+        <part name="id" type="xsd:int"/>
+    </message>
+    <portType name="Invoke">
+        <operation name="Initialize">
+            <input name="input1" message="tns:InitializeRequest"/>
+        </operation>
+        <operation name="Analyze">
+            <input name="input2" message="tns:AnalyzeRequestREST"/>
+        </operation>
+        <operation name="Train">
+            <input name="input3" message="tns:TrainRequestREST"/>
+        </operation>
+    </portType>
+    <portType name="Response">
+        <operation name="Initialize">
+            <input name="input1" message="tns:InitializeResponse"/>
+        </operation>
+        <operation name="Analyze">
+            <input name="input2" message="tns:AnalyzeResponseREST"/>
+        </operation>
+        <operation name="Train">
+            <input name="input3" message="tns:TrainResponseREST"/>
+        </operation>
+    </portType>
+    <plnk:partnerLinkType name="Invoke">
+        <plnk:role name="RESTInvoke" portType="tns:Invoke"/>
+    </plnk:partnerLinkType>
+    <plnk:partnerLinkType name="Receive">
+        <plnk:role name="RESTReceive" portType="tns:Response"/>
+    </plnk:partnerLinkType>
+    <plnk:partnerLinkType name="Synchronous">
+        <plnk:role name="WSCatSync" portType="ns0:WSCat"/>
+    </plnk:partnerLinkType>
+</definitions>
