@@ -29,21 +29,12 @@ public class WSCat {
 	public static final String TYPE = "WSDL";
 	public static final String FILE = "/tmp/"+TYPE+"_trainset.marfcatin";
 	
-	public WSCat(){
-		try{
-			File tfile = new File(FILE);
-			if(!tfile.exists()){
-				MarfcatIn trainFile = ParserFactory.getInstance(TYPE).getTrainSet(FILE, 10);
-				trainFile.write();
-				new Marfcat().train(FILE);
-			}
-		}
-		// Call logger
-		catch(IOException e) { System.err.println(e.getLocalizedMessage());}
-		catch(InterruptedException e) { System.err.println(e.getLocalizedMessage());}
+	@WebMethod(operationName = "trainFromMarfcatIn")
+	public void trainFromMarfcatIn(String file) throws IOException, InterruptedException {
+		new Marfcat().train(file);
 	}
 	
-	@WebMethod(operationName = "train")
+	@WebMethod(operationName = "trainMarfcat")
 	public void trainMarfcat(String type, String file) throws IOException, InterruptedException {
 		type = type.toUpperCase();
 		MarfcatIn trainFile = ParserFactory.getInstance(type).getTrainSet(file, 10);
@@ -169,7 +160,6 @@ public class WSCat {
     private String train (String localPath, String category) 
             throws IOException, InterruptedException, MarfcatNotTrainedException {
         
-        
         MarfcatIn marfIn = new MarfcatIn();
         MarfcatInItem item = new MarfcatInItem();
         item.setPath(localPath);
@@ -190,7 +180,7 @@ public class WSCat {
             sb.append(line);
             sb.append("\n");
             line = br.readLine();
-    }
+        }
         br.close();
         return sb.toString();
     }
