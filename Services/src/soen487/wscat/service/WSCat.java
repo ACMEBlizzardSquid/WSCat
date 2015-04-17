@@ -43,6 +43,14 @@ public class WSCat {
 		catch(InterruptedException e) { System.err.println(e.getLocalizedMessage());}
 	}
 	
+	@WebMethod(operationName = "train")
+	public void trainMarfcat(String type, String file) throws IOException, InterruptedException {
+		type = type.toUpperCase();
+		MarfcatIn trainFile = ParserFactory.getInstance(type).getTrainSet(file, 10);
+		trainFile.write();
+		new Marfcat().train(file);
+	}
+	
     /**
      * Submits a file to analyze 
      * @param file The string representation of the file
