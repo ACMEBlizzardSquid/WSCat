@@ -12,6 +12,16 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.xml.parsers.ParserConfigurationException;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
 import org.xml.sax.SAXException;
 
 import soen487.wscat.marfcat.Marfcat;
@@ -24,6 +34,7 @@ import soen487.wscat.parser.ParserFactory;
 import soen487.wscat.logger.Logger;
 
 @WebService
+@Path("/")
 public class WSCat {
 	
 	public static final String TYPE = "WSDL";
@@ -41,16 +52,9 @@ public class WSCat {
 		trainFile.write();
 		new Marfcat().train(file);
 	}
-	
-    /**
-     * Submits a file to analyze 
-     * @param file The string representation of the file
-     * @return The MARFCAT_IN output
-     * @throws IOException
-     * @throws InterruptedException 
-     */
-    @WebMethod(operationName = "analyzeFile")
-    public String analyzeFile(@WebParam(name = "file") String file) 
+        
+        
+    public String analyzeMETHOD (String file) 
             throws IOException, InterruptedException, MarfcatNotTrainedException {
         
         try {
@@ -80,6 +84,23 @@ public class WSCat {
             throw e;
         }
     }
+	
+    /**
+     * Submits a file to analyze 
+     * @param file The string representation of the file
+     * @return The MARFCAT_IN output
+     * @throws IOException
+     * @throws InterruptedException 
+     */
+    @WebMethod(operationName = "analyzeFile")
+    @POST
+    @Consumes(MediaType.TEXT_XML)
+    @Path("/analyze")
+    public String analyzeFile(@WebParam(name = "file") String file) 
+            throws IOException, InterruptedException, MarfcatNotTrainedException {
+        return analyzeMETHOD(file);
+    }
+    
 
     /*
      Submit a repository URI where WSDLs are linked (for now will
